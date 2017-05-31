@@ -63,18 +63,36 @@ ballFloorContact.contactEquationRegularizationTime = 1;
 ballFloorContact.restitution = 1;
 physics.addContactMaterial(ballFloorContact);
 
-// PLAYER CONTROLS
-let up = keymaster.isPressed('w');
-let down = keymaster.isPressed('s');
-let left = keymaster.isPressed('a');
-let right = keymaster.isPressed('d');
-
 // GAME LOOP
 let previousTime;
 function render() {
   let time = new Date().getTime();
   let delta = time - previousTime;
   previousTime = time;
+
+  // PLAYER CONTROLS
+  let up = keymaster.isPressed('w');
+  let down = keymaster.isPressed('s');
+  let left = keymaster.isPressed('a');
+  let right = keymaster.isPressed('d');
+
+  let forceDirection = new CANNON.Vec3(0, 0, 0);
+  if (up) {
+    forceDirection.vadd(new CANNON.Vec3(0, 0, -1), forceDirection);
+  }
+  if (down) {
+    forceDirection.vadd(new CANNON.Vec3(0, 0, 1), forceDirection);
+  }
+  if (left) {
+    forceDirection.vadd(new CANNON.Vec3(-1, 0, 0), forceDirection);
+  }
+  if (right) {
+    forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
+  }
+  let forcePoint = forceDirection.clone().negate();
+  let pos = ballPhysicalBody.position;
+  forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
+  ballPhysicalBody.applyImpulse(forceDirection, forcePoint);
 
   physics.update(delta);
 
