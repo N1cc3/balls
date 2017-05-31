@@ -23,8 +23,15 @@ scene.add(light);
 let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
 let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 let floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.set(0, -1.4, 0);
+floor.position.set(0, -2, 0);
 scene.add(floor);
+
+let floorPhysicalShape = new CANNON.Plane();
+let floorPhysicalMaterial = new CANNON.Material('floor');
+let floorPhysicalBody = new CANNON.Body({
+  shape: floorPhysicalShape,
+  material: floorPhysicalMaterial
+});
 
 // GAME OBJECTS
 let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
@@ -32,8 +39,8 @@ let ballMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 let ball = new THREE.Mesh(ballGeometry, ballMaterial);
 scene.add(ball);
 
-let ballPhysicalMaterial = new CANNON.Material('ballPhysicalMaterial');
-let ballPhysicalShape = new CANNON.Sphere(2);
+let ballPhysicalShape = new CANNON.Sphere(1);
+let ballPhysicalMaterial = new CANNON.Material('ball');
 let ballPhysicalBody = new CANNON.Body({
   mass: 1,
   shape: ballPhysicalShape,
@@ -44,6 +51,7 @@ let ballPhysicalBody = new CANNON.Body({
 // PHYSICS
 let physics = new Physics();
 physics.add(ballPhysicalBody);
+physics.add(floorPhysicalBody);
 
 // GAME LOOP
 let previousTime;
