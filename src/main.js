@@ -4,7 +4,7 @@ const THREE = require("../node_modules/three/build/three.min.js");
 let scene = new THREE.Scene();
 let aspect = window.innerWidth / window.innerHeight;
 let camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
-camera.position.z = 5;
+camera.position.z = 20;
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -18,12 +18,14 @@ light.position.set(0, 1000, 0);
 scene.add(ambientLight);
 scene.add(light);
 
-// FLOOR
-let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
-let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
-let floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.set(0, -1.4, 0);
-scene.add(floor);
+// HALFPIPE
+var halfPipeGeometry = new THREE.CylinderGeometry(10, 10, 30, 32, 1, true, 0, -Math.PI);
+let halfPipeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+halfPipeMaterial.side = THREE.DoubleSide;
+let halfPipe = new THREE.Mesh(halfPipeGeometry, halfPipeMaterial);
+halfPipe.position.set(0, 0, -20);
+halfPipe.rotation.set(0.5*Math.PI, 0.5*Math.PI, 0);
+scene.add(halfPipe);
 
 // GAME OBJECTS
 let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
