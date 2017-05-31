@@ -20,7 +20,7 @@ scene.add(light);
 
 // HALFPIPE
 var halfPipeGeometry = new THREE.CylinderGeometry(10, 10, 30, 32, 1, true, 0, -Math.PI);
-let halfPipe = new THREE.MeshBasicMaterial({color: 0x00ff00});
+let halfPipeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 halfPipeMaterial.side = THREE.DoubleSide;
 let halfPipe = new THREE.Mesh(halfPipeGeometry, halfPipeMaterial);
 halfPipe.position.set(0, 0, -20);
