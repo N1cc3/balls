@@ -57,8 +57,9 @@ physics.add(ballPhysicalBody);
 physics.add(floorPhysicalBody);
 
 let ballFloorContact = new CANNON.ContactMaterial(ballPhysicalMaterial, floorPhysicalMaterial);
-ballFloorContact.contactEquationStiffness = 1e10;
+ballFloorContact.contactEquationStiffness = 1e4;
 ballFloorContact.contactEquationRegularizationTime = 1;
+ballFloorContact.restitution = 1;
 physics.addContactMaterial(ballFloorContact);
 
 // GAME LOOP
