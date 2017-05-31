@@ -1,6 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.js';
 import CANNON from 'cannon';
 import Physics from './Physics';
+import keymaster from 'keymaster';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -21,7 +22,7 @@ scene.add(ambientLight);
 scene.add(light);
 
 // FLOOR
-let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
+let floorGeometry = new THREE.BoxGeometry(500, 1, 500);
 let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 let floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.set(0, -2.5, 0);
@@ -68,6 +69,30 @@ function render() {
   let time = new Date().getTime();
   let delta = time - previousTime;
   previousTime = time;
+
+  // PLAYER CONTROLS
+  let up = keymaster.isPressed('w');
+  let down = keymaster.isPressed('s');
+  let left = keymaster.isPressed('a');
+  let right = keymaster.isPressed('d');
+
+  let forceDirection = new CANNON.Vec3(0, 0, 0);
+  if (up) {
+    forceDirection.vadd(new CANNON.Vec3(0, 0, -1), forceDirection);
+  }
+  if (down) {
+    forceDirection.vadd(new CANNON.Vec3(0, 0, 1), forceDirection);
+  }
+  if (left) {
+    forceDirection.vadd(new CANNON.Vec3(-1, 0, 0), forceDirection);
+  }
+  if (right) {
+    forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
+  }
+  let forcePoint = forceDirection.clone().negate();
+  let pos = ballPhysicalBody.position;
+  forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
+  ballPhysicalBody.applyImpulse(forceDirection, forcePoint);
 
   physics.update(delta);
 
