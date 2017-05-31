@@ -1,4 +1,4 @@
-const THREE = require("../node_modules/three/build/three.min.js");
+import * as THREE from '../node_modules/three/build/three.js';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
