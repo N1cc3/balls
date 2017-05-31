@@ -53,6 +53,11 @@ let physics = new Physics();
 physics.add(ballPhysicalBody);
 physics.add(floorPhysicalBody);
 
+let ballFloorContact = new CANNON.ContactMaterial(ballPhysicalMaterial, floorPhysicalMaterial);
+ballFloorContact.contactEquationStiffness = 1e10;
+ballFloorContact.contactEquationRegularizationTime = 1;
+physics.addContactMaterial(ballFloorContact);
+
 // GAME LOOP
 let previousTime;
 function render() {
