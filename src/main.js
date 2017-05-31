@@ -1,6 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.js';
 import CANNON from 'cannon';
 import Physics from './Physics';
+import keymaster from 'keymaster';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -61,6 +62,12 @@ ballFloorContact.contactEquationStiffness = 1e4;
 ballFloorContact.contactEquationRegularizationTime = 1;
 ballFloorContact.restitution = 1;
 physics.addContactMaterial(ballFloorContact);
+
+// PLAYER CONTROLS
+let up = keymaster.isPressed('w');
+let down = keymaster.isPressed('s');
+let left = keymaster.isPressed('a');
+let right = keymaster.isPressed('d');
 
 // GAME LOOP
 let previousTime;
