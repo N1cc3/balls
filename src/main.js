@@ -1,5 +1,5 @@
 import * as THREE from '../node_modules/three/build/three.js';
-import CANNON from 'cannon';
+import Physics from './Physics';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -36,9 +36,10 @@ scene.add(ball);
 let physics = new Physics();
 
 // GAME LOOP
+let previousTime;
 function render() {
   let time = new Date().getTime();
-  let delta = Math.min(MAX_DELTA, (time - previousTime) / 1000);
+  let delta = time - previousTime;
   previousTime = time;
 
   renderer.render(scene, camera);
