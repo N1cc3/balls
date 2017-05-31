@@ -1,4 +1,6 @@
-const THREE = require("../node_modules/three/build/three.min.js");
+import * as THREE from '../node_modules/three/build/three.js';
+import CANNON from 'cannon';
+import Physics from './Physics';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -22,8 +24,17 @@ scene.add(light);
 let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
 let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 let floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.set(0, -1.4, 0);
+floor.position.set(0, -2.5, 0);
 scene.add(floor);
+
+let floorPhysicalShape = new CANNON.Plane();
+let floorPhysicalMaterial = new CANNON.Material('floor');
+let floorPhysicalBody = new CANNON.Body({
+  shape: floorPhysicalShape,
+  material: floorPhysicalMaterial
+});
+floorPhysicalBody.position.set(0, -2, 0);
+floorPhysicalBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
 
 // GAME OBJECTS
 let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
@@ -31,8 +42,39 @@ let ballMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 let ball = new THREE.Mesh(ballGeometry, ballMaterial);
 scene.add(ball);
 
+let ballPhysicalShape = new CANNON.Sphere(1);
+let ballPhysicalMaterial = new CANNON.Material('ball');
+let ballPhysicalBody = new CANNON.Body({
+  mass: 1,
+  shape: ballPhysicalShape,
+  material: ballPhysicalMaterial,
+  linearDamping: 0.1
+});
+
+// PHYSICS
+let physics = new Physics();
+physics.add(ballPhysicalBody);
+physics.add(floorPhysicalBody);
+
+let ballFloorContact = new CANNON.ContactMaterial(ballPhysicalMaterial, floorPhysicalMaterial);
+ballFloorContact.contactEquationStiffness = 1e4;
+ballFloorContact.contactEquationRegularizationTime = 1;
+ballFloorContact.restitution = 1;
+physics.addContactMaterial(ballFloorContact);
+
 // GAME LOOP
+let previousTime;
 function render() {
+  let time = new Date().getTime();
+  let delta = time - previousTime;
+  previousTime = time;
+
+  physics.update(delta);
+
+  // UPDATE BALL POSITION
+  let ballPosition = ballPhysicalBody.position;
+  ball.position.set(ballPosition.x, ballPosition.y, ballPosition.z);
+
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
