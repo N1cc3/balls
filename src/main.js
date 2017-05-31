@@ -22,7 +22,7 @@ scene.add(ambientLight);
 scene.add(light);
 
 // FLOOR
-let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
+let floorGeometry = new THREE.BoxGeometry(500, 1, 500);
 let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 let floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.set(0, -2.5, 0);
