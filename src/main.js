@@ -19,12 +19,17 @@ scene.add(ambientLight);
 scene.add(light);
 
 // FLOOR
+let floorGeometry = new THREE.BoxGeometry(5, 1, 5);
+let floorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+let floor = new THREE.Mesh(floorGeometry, floorMaterial);
+floor.position.set(0, -1.4, 0);
+scene.add(floor);
 
 // GAME OBJECTS
-let geometry = new THREE.SphereGeometry( 1, 32, 32 );
-let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-let sphere = new THREE.Mesh( geometry, material );
-scene.add( sphere );
+let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
+let ballMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+let ball = new THREE.Mesh(ballGeometry, ballMaterial);
+scene.add(ball);
 
 // GAME LOOP
 function render() {
