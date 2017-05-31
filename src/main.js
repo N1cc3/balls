@@ -1,4 +1,5 @@
 import * as THREE from '../node_modules/three/build/three.js';
+import CANNON from 'cannon';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -31,9 +32,17 @@ let ballMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 let ball = new THREE.Mesh(ballGeometry, ballMaterial);
 scene.add(ball);
 
+// PHYSICS
+let physics = new Physics();
+
 // GAME LOOP
 function render() {
+  let time = new Date().getTime();
+  let delta = Math.min(MAX_DELTA, (time - previousTime) / 1000);
+  previousTime = time;
+
   renderer.render(scene, camera);
+  physics.update(delta);
   requestAnimationFrame(render);
 }
 render();
