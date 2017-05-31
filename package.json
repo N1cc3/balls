@@ -4,8 +4,8 @@
   "description": "A mobile physics simulation/game",
   "main": "index.js",
   "scripts": {
-    "build" : "webpack",
-    "start" : "webpack-dev-server"
+    "build": "webpack",
+    "start": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/N1cc3/balls#readme",
   "dependencies": {
-    "babel-core": "^6.24.1",
-    "babel-loader": "^7.0.0",
     "cannon": "^0.6.2",
-    "three": "^0.85.2",
-    "webpack": "^2.6.1"
+    "three": "^0.85.2"
   },
   "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   }
 }
