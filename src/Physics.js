@@ -8,8 +8,6 @@ class Physics extends CANNON.World {
   constructor() {
     super();
     this.broadphase = new CANNON.SAPBroadphase(this);
-
-    // World setup
     this.gravity = new CANNON.Vec3(0, -9.81, 0);
     this.allowSleep = false;
     this.solver = new CANNON.GSSolver();
