@@ -32,8 +32,18 @@ let ballMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 let ball = new THREE.Mesh(ballGeometry, ballMaterial);
 scene.add(ball);
 
+let ballPhysicalMaterial = new CANNON.Material('ballPhysicalMaterial');
+let ballPhysicalShape = new CANNON.Sphere(2);
+let ballPhysicalBody = new CANNON.Body({
+  mass: 1,
+  shape: ballPhysicalShape,
+  material: ballPhysicalMaterial,
+  linearDamping: 0.1
+});
+
 // PHYSICS
 let physics = new Physics();
+physics.add(ballPhysicalBody);
 
 // GAME LOOP
 let previousTime;
