@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import CANNON from 'cannon';
 import Physics from './Physics';
 import keymaster from 'keymaster';
-import GameObject from './GameObject';
+import Object from './Object';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -85,7 +85,7 @@ let boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
 let boxPhysicalShape = new CANNON.Box(new CANNON.Vec3(1, 1, 1));
 let boxPhysicalMaterial = new CANNON.Material('ball');
-let box = new GameObject({
+let box = new Object({
   mass: 1,
   shape: boxPhysicalShape,
   material: boxPhysicalMaterial,
