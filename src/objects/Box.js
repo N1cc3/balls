@@ -19,7 +19,7 @@ class Box extends Object {
       mass: 1,
       shape: boxPhysicalShape,
       material: MATERIALS.bouncy,
-      linearDamping: 0.1
+      linearDamping: AIR_RESISTANCE
     });
 
     this.setVisual(SCENE, boxMesh);
