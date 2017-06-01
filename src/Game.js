@@ -23,6 +23,12 @@ class Game {
     this.objects.push(object);
   }
 
+  loadLevel(level) {
+    for (let object of level.objects) {
+      this.addObject(object);
+    }
+  }
+
 }
 
 export default Game;
