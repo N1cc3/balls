@@ -3,6 +3,12 @@ import CANNON from 'cannon';
 const PHYSICS_DELTA = 1 / 60;
 const SUBSTEPS = 1;
 
+export const MATERIALS = {
+  static: new CANNON.Material('static'),
+  bouncy: new CANNON.Material('bouncy'),
+  solid: new CANNON.Material('solid')
+};
+
 class Physics extends CANNON.World {
 
   constructor() {
