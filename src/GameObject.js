@@ -3,8 +3,8 @@ import CANNON from 'cannon';
 
 class GameObject extends CANNON.Body {
 
-  constructor() {
-    super();
+  constructor(options) {
+    super(options);
     this.mesh = null;
   }
 
@@ -14,9 +14,13 @@ class GameObject extends CANNON.Body {
   }
 
   update() {
+    // Update mesh according to body
+    let pos = this.position;
+    this.mesh.position.set(pos.x, pos.y, pos.z);
+    let quat = this.quaternion;
+    this.mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
   }
 
 }
-
 
 export default GameObject;
