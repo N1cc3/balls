@@ -21,7 +21,7 @@ renderer.domElement.focus();
 // LIGHTS
 let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 let light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 50, 25);
+light.position.set(25, 50, 25);
 light.castShadow = true;
 SCENE.add(ambientLight);
 SCENE.add(light);

@@ -9,6 +9,10 @@ class Object extends CANNON.Body {
 
   setVisual(scene, mesh) {
     this.mesh = mesh;
+
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
     scene.add(mesh);
   }
 
