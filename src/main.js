@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import CANNON from 'cannon';
 import keymaster from 'keymaster';
 import Box from './objects/Box';
+import Ball from './objects/Ball';
 import Game from './Game';
 import {SCENE, PHYSICS} from './Game';
 
@@ -80,11 +81,11 @@ floorRightPhysicalBody.position.set(8, 1.5, 0);
 floorRightPhysicalBody.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(-1, 0.85, 0));
 
 // GAME OBJECTS
-let box = new Box(1, 1, 1, '#ffff00');
-box.position.set(7, 5, 0);
+let ball = new Ball(1, 32, '#ff0000');
+ball.position.set(7, 5, 0);
 
 // PHYSICS
-game.addObject(box);
+game.addObject(ball);
 PHYSICS.add(floorBottomPhysicalBody);
 PHYSICS.add(floorLeftPhysicalBody);
 PHYSICS.add(floorRightPhysicalBody);
@@ -122,9 +123,9 @@ function render() {
     forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
   }
   let forcePoint = forceDirection.clone().negate();
-  let pos = box.position;
+  let pos = ball.position;
   forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
-  box.applyImpulse(forceDirection, forcePoint);
+  ball.applyImpulse(forceDirection, forcePoint);
 
   game.update(delta);
 
