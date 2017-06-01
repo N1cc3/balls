@@ -7,22 +7,22 @@ import {SCENE} from '../Game'
 class Box extends Object {
 
   constructor(x, y, z, color) {
-    let boxGeometry = new THREE.BoxGeometry(x, y, z);
-    let boxMaterial = new THREE.MeshStandardMaterial({color: color});
-    let boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+    let geometry = new THREE.BoxGeometry(x, y, z);
+    let material = new THREE.MeshStandardMaterial({color: color});
+    let mesh = new THREE.Mesh(geometry, material);
 
-    let boxPhysicalShape = new CANNON.Box(
+    let shape = new CANNON.Box(
       new CANNON.Vec3(x/2, y/2, z/2)
     );
 
     super({
       mass: 1,
-      shape: boxPhysicalShape,
+      shape: shape,
       material: MATERIALS.bouncy,
       linearDamping: AIR_RESISTANCE
     });
 
-    this.setVisual(SCENE, boxMesh);
+    this.setVisual(SCENE, mesh);
   }
 
 }
