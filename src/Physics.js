@@ -20,6 +20,14 @@ class Physics extends CANNON.World {
     this.solver = new CANNON.GSSolver();
     this.solver.iterations = 10;
     this.solver.tolerance = 0.001;
+
+    // Contacts
+    this.addContactMaterial(
+      new CANNON.ContactMaterial(MATERIALS.bouncy, MATERIALS.static, {
+        restitution: 1
+      }),
+      new CANNON.ContactMaterial(MATERIALS.solid, MATERIALS.static, {})
+    );
   }
 
   update(delta) {

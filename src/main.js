@@ -1,11 +1,9 @@
 import * as THREE from 'three';
 import CANNON from 'cannon';
-import Physics from './Physics';
 import keymaster from 'keymaster';
 import Box from './objects/Box';
 import Game from './Game';
-import {SCENE} from './Game';
-import {MATERIALS} from './Physics';
+import {SCENE, PHYSICS} from './Game';
 
 // SCENE, CAMERA, RENDERER
 let game = new Game();
@@ -86,17 +84,16 @@ let box = new Box(1, 1, 1, '#ffff00');
 box.position.set(7, 5, 0);
 
 // PHYSICS
-let physics = new Physics();
-physics.add(box);
-physics.add(floorBottomPhysicalBody);
-physics.add(floorLeftPhysicalBody);
-physics.add(floorRightPhysicalBody);
+game.addObject(box);
+PHYSICS.add(floorBottomPhysicalBody);
+PHYSICS.add(floorLeftPhysicalBody);
+PHYSICS.add(floorRightPhysicalBody);
 
-let boxFloorContact = new CANNON.ContactMaterial(MATERIALS.bouncy, MATERIALS.static);
-boxFloorContact.contactEquationStiffness = 1e4;
-boxFloorContact.contactEquationRegularizationTime = 1;
-boxFloorContact.restitution = 1;
-physics.addContactMaterial(boxFloorContact);
+for (let i = 0; i < 10; i++) {
+  let box = new Box(1, 1, 1, '#ffff00');
+  box.position.set(-5 + i, 5, 0);
+  game.addObject(box);
+}
 
 // GAME LOOP
 let previousTime;
@@ -129,10 +126,7 @@ function render() {
   forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
   box.applyImpulse(forceDirection, forcePoint);
 
-  physics.update(delta);
-
-  // UPDATE BALL POSITION
-  box.update();
+  game.update(delta);
 
   renderer.render(SCENE, camera);
   requestAnimationFrame(render);
