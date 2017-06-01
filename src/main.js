@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import CANNON from 'cannon';
 import Physics from './Physics';
 import keymaster from 'keymaster';
+import GameObject from './GameObject';
 
 // SCENE, CAMERA, RENDERER
 let scene = new THREE.Scene();
@@ -16,9 +17,9 @@ renderer.domElement.setAttribute('tabIndex', '0');
 renderer.domElement.focus();
 
 // LIGHTS
-let ambientLight = new THREE.AmbientLight(0x444444, 0.1);
+let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 let light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 50, 0);
+light.position.set(0, 50, 25);
 light.castShadow = true;
 scene.add(ambientLight);
 scene.add(light);
@@ -78,33 +79,33 @@ floorRightPhysicalBody.position.set(8, 1.5, 0);
 floorRightPhysicalBody.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(-1, 0.85, 0));
 
 // GAME OBJECTS
-let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
-let ballMaterial = new THREE.MeshStandardMaterial({color: 0xffff00});
-let ball = new THREE.Mesh(ballGeometry, ballMaterial);
-scene.add(ball);
+let boxGeometry = new THREE.BoxGeometry(2, 2, 2);
+let boxMaterial = new THREE.MeshStandardMaterial({color: 0xffff00});
+let boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
 
-let ballPhysicalShape = new CANNON.Sphere(1);
-let ballPhysicalMaterial = new CANNON.Material('ball');
-let ballPhysicalBody = new CANNON.Body({
+let boxPhysicalShape = new CANNON.Box(new CANNON.Vec3(1, 1, 1));
+let boxPhysicalMaterial = new CANNON.Material('ball');
+let box = new GameObject({
   mass: 1,
-  shape: ballPhysicalShape,
-  material: ballPhysicalMaterial,
+  shape: boxPhysicalShape,
+  material: boxPhysicalMaterial,
   linearDamping: 0.1
 });
-ballPhysicalBody.position.set(7, 5, 0);
+box.position.set(7, 5, 0);
+box.setVisual(scene, boxMesh);
 
 // PHYSICS
 let physics = new Physics();
-physics.add(ballPhysicalBody);
+physics.add(box);
 physics.add(floorBottomPhysicalBody);
 physics.add(floorLeftPhysicalBody);
 physics.add(floorRightPhysicalBody);
 
-let ballFloorContact = new CANNON.ContactMaterial(ballPhysicalMaterial, floorPhysicalMaterial);
-ballFloorContact.contactEquationStiffness = 1e4;
-ballFloorContact.contactEquationRegularizationTime = 1;
-ballFloorContact.restitution = 1;
-physics.addContactMaterial(ballFloorContact);
+let boxFloorContact = new CANNON.ContactMaterial(boxPhysicalMaterial, floorPhysicalMaterial);
+boxFloorContact.contactEquationStiffness = 1e4;
+boxFloorContact.contactEquationRegularizationTime = 1;
+boxFloorContact.restitution = 1;
+physics.addContactMaterial(boxFloorContact);
 
 // GAME LOOP
 let previousTime;
@@ -133,15 +134,14 @@ function render() {
     forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
   }
   let forcePoint = forceDirection.clone().negate();
-  let pos = ballPhysicalBody.position;
+  let pos = box.position;
   forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
-  ballPhysicalBody.applyImpulse(forceDirection, forcePoint);
+  box.applyImpulse(forceDirection, forcePoint);
 
   physics.update(delta);
 
   // UPDATE BALL POSITION
-  let ballPosition = ballPhysicalBody.position;
-  ball.position.set(ballPosition.x, ballPosition.y, ballPosition.z);
+  box.update();
 
   renderer.render(scene, camera);
   requestAnimationFrame(render);
