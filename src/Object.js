@@ -1,7 +1,6 @@
-import * as THREE from 'three';
 import CANNON from 'cannon';
 
-class GameObject extends CANNON.Body {
+class Object extends CANNON.Body {
 
   constructor(options) {
     super(options);
