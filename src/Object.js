@@ -22,4 +22,4 @@ class Object extends CANNON.Body {
 
 }
 
-export default GameObject;
+export default Object;
