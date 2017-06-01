@@ -1,4 +1,4 @@
-import * as THREE from '../node_modules/three/build/three.js';
+import * as THREE from 'three';
 import CANNON from 'cannon';
 import Physics from './Physics';
 import keymaster from 'keymaster';
