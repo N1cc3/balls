@@ -3,6 +3,13 @@ import CANNON from 'cannon';
 const PHYSICS_DELTA = 1 / 60;
 const SUBSTEPS = 1;
 
+export const AIR_RESISTANCE = 0.1;
+export const MATERIALS = {
+  static: new CANNON.Material('static'),
+  bouncy: new CANNON.Material('bouncy'),
+  solid: new CANNON.Material('solid')
+};
+
 class Physics extends CANNON.World {
 
   constructor() {
@@ -13,6 +20,14 @@ class Physics extends CANNON.World {
     this.solver = new CANNON.GSSolver();
     this.solver.iterations = 10;
     this.solver.tolerance = 0.001;
+
+    // Contacts
+    this.addContactMaterial(
+      new CANNON.ContactMaterial(MATERIALS.bouncy, MATERIALS.static, {
+        restitution: 1
+      }),
+      new CANNON.ContactMaterial(MATERIALS.solid, MATERIALS.static, {})
+    );
   }
 
   update(delta) {
