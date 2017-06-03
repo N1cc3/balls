@@ -12,6 +12,11 @@ let game = new Game();
 let aspect = window.innerWidth / window.innerHeight;
 let camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
 camera.position.z = 20;
+
+var audioLoader = new THREE.AudioLoader();
+var listener = new THREE.AudioListener();
+camera.add(listener);
+
 let renderer = new THREE.WebGLRenderer();
 renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -30,16 +35,22 @@ SCENE.add(light);
 // GAME OBJECTS
 let ball = new Ball(1, 32, '#ff0000');
 ball.position.set(7, 5, 0);
-
-// PHYSICS
 game.addObject(ball);
-game.loadLevel(new HalfPipe());
 
 for (let i = 0; i < 10; i++) {
   let box = new Box(1, 1, 1, '#ffff00');
   box.position.set(-5 + i, 5, 0);
   game.addObject(box);
 }
+
+game.loadLevel(new HalfPipe());
+
+// SOUNDS
+var bounceSound = new THREE.PositionalAudio(listener);
+audioLoader.load('../sounds/bounce.wav', function(buffer) {
+  bounceSound.setBuffer(buffer);
+  bounceSound.setRefDistance(5);
+});
 
 // GAME LOOP
 let previousTime;
@@ -73,6 +84,16 @@ function render() {
   ball.applyImpulse(forceDirection, forcePoint);
 
   game.update(delta);
+
+  for (let contact of PHYSICS.contacts) {
+    if (contact.bi == ball || contact.bj == ball) {
+      let hitSpeed = contact.computeGW();
+      ball.mesh.add(bounceSound);
+      bounceSound.setVolume(hitSpeed / 30);
+      if (bounceSound.isPlaying) bounceSound.stop();
+      bounceSound.play();
+    }
+  }
 
   renderer.render(SCENE, camera);
   requestAnimationFrame(render);
