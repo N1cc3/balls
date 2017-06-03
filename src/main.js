@@ -76,8 +76,12 @@ function render() {
   ball.applyImpulse(forceDirection, forcePoint);
 
   game.update(delta);
-  
-  followCamera.update();
+
+  let heading = new THREE.Vector3(forceDirection.z, -forceDirection.x, 0);
+  if (heading.length() !== 0) {
+    heading.normalize();
+  }
+  followCamera.update(delta, heading);
 
   renderer.render(SCENE, followCamera);
   requestAnimationFrame(render);
