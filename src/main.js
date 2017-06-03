@@ -29,6 +29,10 @@ let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 let light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(25, 50, 25);
 light.castShadow = true;
+light.shadowCameraLeft = -20;
+light.shadowCameraRight = 20;
+light.shadowCameraTop = 20;
+light.shadowCameraBottom = -20;
 SCENE.add(ambientLight);
 SCENE.add(light);
 
