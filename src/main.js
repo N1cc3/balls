@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import CANNON from 'cannon';
 import keymaster from 'keymaster';
+import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
 import Ball from './objects/Ball';
 import Game from './Game';
@@ -10,11 +11,11 @@ import HalfPipe from './levels/HalfPipe';
 // SCENE, CAMERA, RENDERER
 let game = new Game();
 let aspect = window.innerWidth / window.innerHeight;
-let camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
-camera.position.z = 20;
+let followCamera = new FollowCamera();
+followCamera.position.z = 20;
 
-var audioLoader = new THREE.AudioLoader();
-var listener = new THREE.AudioListener();
+let audioLoader = new THREE.AudioLoader();
+let listener = new THREE.AudioListener();
 camera.add(listener);
 
 let renderer = new THREE.WebGLRenderer();
@@ -23,6 +24,13 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 renderer.domElement.setAttribute('tabIndex', '0');
 renderer.domElement.focus();
+
+window.onresize = function () {
+  aspect = window.innerWidth / window.innerHeight
+  camera.aspect = aspect;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
 
 // LIGHTS
 let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
@@ -38,7 +46,11 @@ SCENE.add(light);
 
 // GAME OBJECTS
 let ball = new Ball(1, 32, '#ff0000');
-ball.position.set(7, 5, 0);
+ball.position.set(0, 5, 10);
+
+followCamera.setTarget(ball);
+
+// PHYSICS
 game.addObject(ball);
 
 for (let i = 0; i < 10; i++) {
@@ -50,7 +62,7 @@ for (let i = 0; i < 10; i++) {
 game.loadLevel(new HalfPipe());
 
 // SOUNDS
-var bounceSound = new THREE.PositionalAudio(listener);
+let bounceSound = new THREE.PositionalAudio(listener);
 audioLoader.load('../sounds/bounce.wav', function(buffer) {
   bounceSound.setBuffer(buffer);
   bounceSound.setRefDistance(5);
@@ -99,7 +111,13 @@ function render() {
     }
   }
 
-  renderer.render(SCENE, camera);
+  let heading = new THREE.Vector3(forceDirection.z, -forceDirection.x, 0);
+  if (heading.length() !== 0) {
+    heading.normalize();
+  }
+  followCamera.update(delta, heading);
+
+  renderer.render(SCENE, followCamera);
   requestAnimationFrame(render);
 }
 render();
