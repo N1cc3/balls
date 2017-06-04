@@ -16,7 +16,7 @@ followCamera.position.z = 20;
 
 let audioLoader = new THREE.AudioLoader();
 let listener = new THREE.AudioListener();
-camera.add(listener);
+followCamera.add(listener);
 
 let renderer = new THREE.WebGLRenderer();
 renderer.shadowMap.enabled = true;
