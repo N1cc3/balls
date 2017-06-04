@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import CANNON from 'cannon';
 import Level from '../Level';
 import Box from '../objects/Box';
@@ -7,6 +8,14 @@ class HalfPipe extends Level {
 
   constructor() {
     super();
+    
+    var background = new THREE.Mesh(
+      new THREE.SphereGeometry(2000, 32, 32),
+      new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load('./media/backgrounds/parco_della_caffarella.jpeg')
+      })
+    );
+    background.scale.x = -1; // Invert the sphere
 
     let bottom = new Box(10, 0.1, 30, '#00ff00');
     let left = new Box(10, 0.1, 30, '#00ff00');
@@ -31,10 +40,10 @@ class HalfPipe extends Level {
     left.position.set(-8, 1.5, 0);
     right.position.set(8, 1.5, 0);
 
-
     this.add(bottom);
     this.add(left);
     this.add(right);
+    this.setBackground(background);
   }
 
 }

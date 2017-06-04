@@ -27,6 +27,7 @@ class Game {
     for (let object of level.objects) {
       this.addObject(object);
     }
+    SCENE.add(level.background);
   }
 
 }
