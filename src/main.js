@@ -27,8 +27,8 @@ renderer.domElement.focus();
 
 window.onresize = function () {
   aspect = window.innerWidth / window.innerHeight
-  camera.aspect = aspect;
-  camera.updateProjectionMatrix();
+  followCamera.aspect = aspect;
+  followCamera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
