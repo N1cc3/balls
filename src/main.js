@@ -20,6 +20,13 @@ document.body.appendChild(renderer.domElement);
 renderer.domElement.setAttribute('tabIndex', '0');
 renderer.domElement.focus();
 
+window.onresize = function () {
+  aspect = window.innerWidth / window.innerHeight
+  camera.aspect = aspect;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
+
 // LIGHTS
 let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 let light = new THREE.DirectionalLight(0xffffff, 1);
