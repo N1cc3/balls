@@ -4,7 +4,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
     
   constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/6),
               maxRotDeviation = 30*(Math.PI/180),
-              followDamp = 20,
+              followVel = 0.002,
               angVel = 0.002,
               baseDistance = 10,
               fov = 75, 
@@ -18,7 +18,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
     this.baseRotation = baseRotation;
     this.currRotation = baseRotation.clone();
     this.maxRotDeviation = maxRotDeviation;
-    this.followDamp = followDamp;
+    this.followVel = followVel;
     this.angVel = angVel;
     this.baseDistance = baseDistance;
     this.target = null;
@@ -41,17 +41,15 @@ class FollowCamera extends THREE.PerspectiveCamera {
   }
   
   calcPosVec(delta, heading) {
-    let rotation = this.calcRotation(delta, heading);
-    let rotVec = this.targetBack.clone().applyQuaternion(rotation);
     
-    let posDiff = this.calcPosDiff(delta);
+    let rotation = this.calcRotation(delta, heading);
+    let backVec = this.calcBackVec(delta);
 
-    return posDiff.add(rotVec).setLength(this.baseDistance);   
+    return backVec.setLength(this.baseDistance).applyQuaternion(rotation);   
   }
   
   calcRotation(delta, heading) {
     let goalQuat;
-    
     if (heading.length() != 0) {
       let axisAngleHeading = heading.set(heading.y, heading.x, 0);
       let maxRotDevQuat = new THREE.Quaternion().setFromAxisAngle(heading, this.maxRotDeviation);
@@ -61,19 +59,27 @@ class FollowCamera extends THREE.PerspectiveCamera {
     }
     
     let rotDiff = this.quaternionAngleDiff(this.currRotation, goalQuat);
-    let tRot = Math.min(1, delta*(this.angVel/rotDiff));
-    return this.currRotation.slerp(goalQuat, tRot);
+    let t = Math.min(1, delta*(this.angVel/rotDiff));
+    return this.currRotation.slerp(goalQuat, t).clone();
   }
   
   quaternionAngleDiff(q1, q2) {
     return Math.acos(q1.dot(q2))/(q1.length()*q2.length());
   }
   
-  calcPosDiff(delta) {
-    let thisPos = this.position;
+  calcBackVec(delta) {
+    let backPos = this.targetBack;
     let targetPos = this.target.position;
-    let posDiff = new THREE.Vector3(thisPos.x - targetPos.x, thisPos.y - targetPos.y, thisPos.z - targetPos.z);
-    return posDiff;
+    let posDiff = new THREE.Vector3(backPos.x - targetPos.x, backPos.y - targetPos.y, backPos.z - targetPos.z);
+
+    if (posDiff.length() != 0 && !isNaN(delta)) {
+      posDiff.normalize();
+      let angle = backPos.angleTo(posDiff);
+      let t = Math.min(1, delta*(this.followVel/angle));
+      this.targetBack.lerp(posDiff, t);
+    }
+
+    return this.targetBack.clone();
   }
   
 }
