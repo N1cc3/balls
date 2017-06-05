@@ -8,8 +8,8 @@ class HalfPipe extends Level {
 
   constructor() {
     super();
-    
-    var background = new THREE.Mesh(
+
+    let background = new THREE.Mesh(
       new THREE.SphereGeometry(2000, 32, 32),
       new THREE.MeshBasicMaterial({
         map: new THREE.TextureLoader().load('./media/backgrounds/parco_della_caffarella.jpeg')
