@@ -7,6 +7,7 @@ import Ball from './objects/Ball';
 import Game from './Game';
 import {SCENE, PHYSICS} from './Game';
 import HalfPipe from './levels/HalfPipe';
+import {MATERIALS} from './Physics';
 
 // SCENE, CAMERA, RENDERER
 let game = new Game();
@@ -59,14 +60,25 @@ for (let i = 0; i < 10; i++) {
   game.addObject(box);
 }
 
-game.loadLevel(new HalfPipe());
-
 // SOUNDS
-let bounceSound = new THREE.PositionalAudio(listener);
-audioLoader.load('../sounds/bounce.wav', function(buffer) {
-  bounceSound.setBuffer(buffer);
-  bounceSound.setRefDistance(5);
+audioLoader.load('../sounds/thump.mp3', function(buffer) {
+  for (let object of game.objects) {
+    object.onCollide((e) => {
+      let contact = e.contact;
+      let hitSpeed = Math.abs(contact.getImpactVelocityAlongNormal());
+      let volume = 0.2 * hitSpeed;
+      if (volume > 0.1) {
+        let sound = new THREE.PositionalAudio(listener);
+        sound.setBuffer(buffer);
+        sound.setRefDistance(volume);
+        object.mesh.add(sound);
+        sound.play();
+      }
+    });
+  }
 });
+
+game.loadLevel(new HalfPipe());
 
 // GAME LOOP
 let previousTime;
@@ -99,17 +111,7 @@ function render() {
   forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
   ball.applyImpulse(forceDirection, forcePoint);
 
-  game.update(delta);
-
-  for (let contact of PHYSICS.contacts) {
-    if (contact.bi == ball || contact.bj == ball) {
-      let hitSpeed = contact.computeGW();
-      ball.mesh.add(bounceSound);
-      bounceSound.setVolume(hitSpeed / 30);
-      if (bounceSound.isPlaying) bounceSound.stop();
-      bounceSound.play();
-    }
-  }
+  game.update(delta, ball);
 
   let heading = new THREE.Vector3(forceDirection.z, -forceDirection.x, 0);
   if (heading.length() !== 0) {
