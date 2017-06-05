@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 class FollowCamera extends THREE.PerspectiveCamera {
     
-  constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/6),
+  constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/24),
               maxRotDeviation = 30*(Math.PI/180),
-              followVel = 0.002,
+              followVel = 0.02,
               angVel = 0.002,
               baseDistance = 10,
               fov = 75, 
@@ -13,8 +13,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
               far = 10000) {
     super(fov, aspect, near, far);
 
-    this.targetBack = new THREE.Vector3(0, 0, 1);
-    this.targetBackRot = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 0), 0);
+    this.truePos = null;
     this.baseRotation = baseRotation;
     this.currRotation = baseRotation.clone();
     this.maxRotDeviation = maxRotDeviation;
@@ -27,7 +26,8 @@ class FollowCamera extends THREE.PerspectiveCamera {
   setTarget(target) {
     this.target = target;
     let targetPos = this.target.position;
-    let posVec = this.targetBack.clone().applyQuaternion(this.baseRotation).setLength(this.baseDistance);
+    this.truePos = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z + this.baseDistance);
+    let posVec = this.getRelativePos().setLength(this.baseDistance).applyQuaternion(this.baseRotation);
     this.position.set(targetPos.x + posVec.x, targetPos.y + posVec.y, targetPos.z + posVec.z);
     this.lookAt(targetPos);
   }
@@ -43,9 +43,9 @@ class FollowCamera extends THREE.PerspectiveCamera {
   calcPosVec(delta, heading) {
     
     let rotation = this.calcRotation(delta, heading);
-    let backVec = this.calcBackVec(delta);
+    let posVec = this.calcBackVec(delta);
 
-    return backVec.setLength(this.baseDistance).applyQuaternion(rotation);   
+    return posVec.applyQuaternion(rotation);   
   }
   
   calcRotation(delta, heading) {
@@ -68,18 +68,28 @@ class FollowCamera extends THREE.PerspectiveCamera {
   }
   
   calcBackVec(delta) {
-    let backPos = this.targetBack;
-    let targetPos = this.target.position;
-    let posDiff = new THREE.Vector3(backPos.x - targetPos.x, backPos.y - targetPos.y, backPos.z - targetPos.z);
-
-    if (posDiff.length() != 0 && !isNaN(delta)) {
-      posDiff.normalize();
-      let angle = backPos.angleTo(posDiff);
-      let t = Math.min(1, delta*(this.followVel/angle));
-      this.targetBack.lerp(posDiff, t);
+    let thispos = this.truePos.clone();
+    let targetPos = this.target.position.clone();
+    let posDiff = new THREE.Vector3(targetPos.x - thispos.x, targetPos.y - thispos.y, targetPos.z - thispos.z);
+    
+    /*
+    if (Math.abs(Math.atan(posDiff.y/posDiff.x)) < Math.PI/4) {
+        thispos.y = 0;
+    }
+    */
+    
+    if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
+        posDiff.multiplyScalar(1 - this.baseDistance/posDiff.length());
+        this.truePos.lerp(thispos.add(posDiff), delta*this.followVel);
     }
 
-    return this.targetBack.clone();
+    return this.getRelativePos();
+  }
+  
+  getRelativePos() {
+    let thisPos = this.truePos;
+    let targetPos = this.target.position;
+    return new THREE.Vector3(thisPos.x - targetPos.x, thisPos.y - targetPos.y, thisPos.z - targetPos.z);
   }
   
 }
