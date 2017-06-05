@@ -51,7 +51,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
   calcRotation(delta, heading) {
     let goalQuat;
     if (heading.length() != 0) {
-      let axisAngleHeading = heading.set(heading.y, heading.x, 0);
+      let axisAngleHeading = heading.set(heading.y, -heading.x, 0);
       let maxRotDevQuat = new THREE.Quaternion().setFromAxisAngle(heading, this.maxRotDeviation);
       goalQuat = this.baseRotation.clone().multiply(maxRotDevQuat);
     } else {
