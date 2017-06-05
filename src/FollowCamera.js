@@ -4,7 +4,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
     
   constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/24),
               maxRotDeviation = 30*(Math.PI/180),
-              followVel = 0.02,
+              followVel = 0.01,
               angVel = 0.002,
               baseDistance = 10,
               fov = 75, 
@@ -79,8 +79,7 @@ class FollowCamera extends THREE.PerspectiveCamera {
     */
     
     if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
-        posDiff.multiplyScalar(1 - this.baseDistance/posDiff.length());
-        this.truePos.lerp(thispos.add(posDiff), delta*this.followVel);
+        this.truePos.lerp(thispos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
     }
 
     return this.getRelativePos();
