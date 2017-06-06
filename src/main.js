@@ -84,7 +84,7 @@ function render() {
 
   game.update(delta);
 
-  let heading = new THREE.Vector3(forceDirection.z, -forceDirection.x, 0);
+  let heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   if (heading.length() !== 0) {
     heading.normalize();
   }
