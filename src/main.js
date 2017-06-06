@@ -56,7 +56,7 @@ game.addObject(ball);
 
 for (let i = 0; i < 10; i++) {
   let box = new Box(1, 1, 1, '#ffff00');
-  box.position.set(-5 + i, 5, 0);
+  box.position.set(-5 + i, 5 + 0.2 * i, 0);
   game.addObject(box);
 }
 
@@ -66,11 +66,12 @@ audioLoader.load('../sounds/thump.mp3', function(buffer) {
     object.onCollide((e) => {
       let contact = e.contact;
       let hitSpeed = Math.abs(contact.getImpactVelocityAlongNormal());
-      let volume = 0.2 * hitSpeed;
-      if (volume > 0.1) {
+      let volume = Math.min(1, 0.02 * hitSpeed);
+      if (volume > 0.02) {
         let sound = new THREE.PositionalAudio(listener);
         sound.setBuffer(buffer);
-        sound.setRefDistance(volume);
+        sound.setRefDistance(1);
+        sound.setVolume(volume);
         object.mesh.add(sound);
         sound.play();
       }
