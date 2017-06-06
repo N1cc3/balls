@@ -27,8 +27,8 @@ class FollowCamera extends THREE.PerspectiveCamera {
     this.target = target;
     let targetPos = this.target.position;
     this.truePos = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z + this.baseDistance);
-    let posVec = this.getRelativePos().setLength(this.baseDistance).applyQuaternion(this.baseRotation);
-    this.position.set(targetPos.x + posVec.x, targetPos.y + posVec.y, targetPos.z + posVec.z);
+    let posVec = this.truePos.clone().sub(targetPos).setLength(this.baseDistance).applyQuaternion(this.baseRotation);
+    this.position.copy(targetPos.clone().vadd(posVec));
     this.lookAt(targetPos);
   }
 
@@ -36,12 +36,11 @@ class FollowCamera extends THREE.PerspectiveCamera {
     let targetPos = this.target.position;
     let posVec = this.calcPosVec(delta, heading);
 
-    this.position.set(targetPos.x + posVec.x, targetPos.y + posVec.y, targetPos.z + posVec.z);
+    this.position.copy(targetPos.clone().vadd(posVec));
     this.lookAt(targetPos);
   }
 
   calcPosVec(delta, heading) {
-
     let rotation = this.calcRotation(delta, heading);
     let posVec = this.calcBackVec(delta);
 
@@ -60,13 +59,13 @@ class FollowCamera extends THREE.PerspectiveCamera {
 
     let rotDiff = quaternionAngleDiff(this.currRotation, goalQuat);
     let t = Math.min(1, delta*(this.angVel/rotDiff));
-    return this.currRotation.slerp(goalQuat, t).clone();
+    return this.currRotation.slerp(goalQuat, t).clone()
   }
 
   calcBackVec(delta) {
-    let thispos = this.truePos.clone();
+    let thisPos = this.truePos.clone();
     let targetPos = this.target.position.clone();
-    let posDiff = new THREE.Vector3(targetPos.x - thispos.x, targetPos.y - thispos.y, targetPos.z - thispos.z);
+    let posDiff = targetPos.vsub(thisPos);
 
     /*
     if (Math.abs(Math.atan(posDiff.y/posDiff.x)) < Math.PI/4) {
@@ -75,18 +74,11 @@ class FollowCamera extends THREE.PerspectiveCamera {
     */
 
     if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
-        this.truePos.lerp(thispos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
+        this.truePos.lerp(thisPos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
     }
 
-    return this.getRelativePos();
+    return this.truePos.clone().sub(targetPos);
   }
-
-  getRelativePos() {
-    let thisPos = this.truePos;
-    let targetPos = this.target.position;
-    return new THREE.Vector3(thisPos.x - targetPos.x, thisPos.y - targetPos.y, thisPos.z - targetPos.z);
-  }
-
 }
 
 function quaternionAngleDiff(q1, q2) {
