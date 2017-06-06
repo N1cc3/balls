@@ -2,8 +2,9 @@ import * as THREE from 'three';
 
 class FollowCamera extends THREE.PerspectiveCamera {
 
-  constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/6),
+  constructor(baseRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI/24),
               maxRotDeviation = 30*(Math.PI/180),
+              followVel = 0.01,
               angVel = 0.002,
               baseDistance = 10,
               fov = 75,
@@ -12,10 +13,11 @@ class FollowCamera extends THREE.PerspectiveCamera {
               far = 10000) {
     super(fov, aspect, near, far);
 
-    this.targetBack = new THREE.Vector3(0, 0, 1);
+    this.truePos = null;
     this.baseRotation = baseRotation;
     this.currRotation = baseRotation.clone();
     this.maxRotDeviation = maxRotDeviation;
+    this.followVel = followVel;
     this.angVel = angVel;
     this.baseDistance = baseDistance;
     this.target = null;
@@ -24,39 +26,63 @@ class FollowCamera extends THREE.PerspectiveCamera {
   setTarget(target) {
     this.target = target;
     let targetPos = this.target.position;
-    let posVec = this.targetBack.clone().applyQuaternion(this.baseRotation).setLength(this.baseDistance);
-    this.position.set(targetPos.x + posVec.x, targetPos.y + posVec.y, targetPos.z + posVec.z);
+    this.truePos = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z + this.baseDistance);
+    let posVec = this.truePos.clone().sub(targetPos).setLength(this.baseDistance).applyQuaternion(this.baseRotation);
+    this.position.copy(targetPos.clone().vadd(posVec));
     this.lookAt(targetPos);
   }
 
-  baseRotationSlerpToPosVec(delta, heading) {
-    let goalQuat;
+  update(delta, heading) {
+    let targetPos = this.target.position;
+    let posVec = this.calcPosVec(delta, heading);
 
+    this.position.copy(targetPos.clone().vadd(posVec));
+    this.lookAt(targetPos);
+  }
+
+  calcPosVec(delta, heading) {
+    let rotation = this.calcRotation(delta, heading);
+    let posVec = this.calcBackVec(delta);
+
+    return posVec.applyQuaternion(rotation);
+  }
+
+  calcRotation(delta, heading) {
+    let goalQuat;
     if (heading.length() != 0) {
+      let axisAngleHeading = heading.set(heading.y, -heading.x, 0);
       let maxRotDevQuat = new THREE.Quaternion().setFromAxisAngle(heading, this.maxRotDeviation);
       goalQuat = this.baseRotation.clone().multiply(maxRotDevQuat);
     } else {
       goalQuat = this.baseRotation.clone();
     }
 
-    let currGoalDiff = this.quaternionAngleDiff(this.currRotation, goalQuat);
-    let t = Math.min(1, delta*(this.angVel/currGoalDiff));
-
-    this.currRotation.slerp(goalQuat, t);
-    return this.targetBack.clone().applyQuaternion(this.currRotation).setLength(this.baseDistance);
+    let rotDiff = quaternionAngleDiff(this.currRotation, goalQuat);
+    let t = Math.min(1, delta*(this.angVel/rotDiff));
+    return this.currRotation.slerp(goalQuat, t).clone()
   }
 
-  quaternionAngleDiff(q1, q2) {
-    return Math.acos(q1.dot(q2))/(q1.length()*q2.length());
-  }
+  calcBackVec(delta) {
+    let thisPos = this.truePos.clone();
+    let targetPos = this.target.position.clone();
+    let posDiff = targetPos.vsub(thisPos);
 
-  update(delta, heading) {
-    let targetPos = this.target.position;
-    let posVec = this.baseRotationSlerpToPosVec(delta, heading);
+    /*
+    if (Math.abs(Math.atan(posDiff.y/posDiff.x)) < Math.PI/4) {
+      thispos.y = 0;
+    }
+    */
 
-    this.position.set(targetPos.x + posVec.x, targetPos.y + posVec.y, targetPos.z + posVec.z);
-    this.lookAt(targetPos);
+    if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
+      this.truePos.lerp(thisPos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
+    }
+
+    return this.truePos.clone().sub(targetPos);
   }
+}
+
+function quaternionAngleDiff(q1, q2) {
+  return Math.acos(q1.dot(q2))/(q1.length()*q2.length());
 }
 
 export default FollowCamera;
