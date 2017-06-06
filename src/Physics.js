@@ -1,7 +1,7 @@
 import CANNON from 'cannon';
 
 const PHYSICS_DELTA = 1 / 60;
-const SUBSTEPS = 1;
+const SUBSTEPS = 2;
 
 export const AIR_RESISTANCE = 0.1;
 export const MATERIALS = {
@@ -16,15 +16,12 @@ class Physics extends CANNON.World {
     super();
     this.broadphase = new CANNON.SAPBroadphase(this);
     this.gravity = new CANNON.Vec3(0, -9.81, 0);
-    this.allowSleep = false;
     this.solver = new CANNON.GSSolver();
-    this.solver.iterations = 10;
-    this.solver.tolerance = 0.001;
 
     // Contacts
     this.addContactMaterial(
       new CANNON.ContactMaterial(MATERIALS.bouncy, MATERIALS.static, {
-        restitution: 1
+        restitution: 0.7
       }),
       new CANNON.ContactMaterial(MATERIALS.solid, MATERIALS.static, {})
     );

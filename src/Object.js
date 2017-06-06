@@ -24,6 +24,12 @@ class Object extends CANNON.Body {
     this.mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
   }
 
+  onCollide(callback) {
+    this.addEventListener('collide', function(e) {
+      callback(e);
+    });
+  }
+
 }
 
 export default Object;

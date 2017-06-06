@@ -7,12 +7,18 @@ import Ball from './objects/Ball';
 import Game from './Game';
 import {SCENE, PHYSICS} from './Game';
 import HalfPipe from './levels/HalfPipe';
+import {MATERIALS} from './Physics';
 
 // SCENE, CAMERA, RENDERER
 let game = new Game();
 let aspect = window.innerWidth / window.innerHeight;
 let followCamera = new FollowCamera();
 followCamera.position.z = 20;
+
+let audioLoader = new THREE.AudioLoader();
+let listener = new THREE.AudioListener();
+followCamera.add(listener);
+
 let renderer = new THREE.WebGLRenderer();
 renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -32,6 +38,10 @@ let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 let light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(25, 50, 25);
 light.castShadow = true;
+light.shadow.camera.left = -20;
+light.shadow.camera.right = 20;
+light.shadow.camera.top = 20;
+light.shadow.camera.bottom = -20;
 SCENE.add(ambientLight);
 SCENE.add(light);
 
@@ -43,13 +53,33 @@ followCamera.setTarget(ball);
 
 // PHYSICS
 game.addObject(ball);
-game.loadLevel(new HalfPipe());
 
 for (let i = 0; i < 10; i++) {
   let box = new Box(1, 1, 1, '#ffff00');
-  box.position.set(-5 + i, 5, 0);
+  box.position.set(-5 + i, 5 + 0.2 * i, 0);
   game.addObject(box);
 }
+
+// SOUNDS
+audioLoader.load('../sounds/thump.mp3', function(buffer) {
+  for (let object of game.objects) {
+    object.onCollide((e) => {
+      let contact = e.contact;
+      let hitSpeed = Math.abs(contact.getImpactVelocityAlongNormal());
+      let volume = Math.min(1, 0.02 * hitSpeed);
+      if (volume > 0.02) {
+        let sound = new THREE.PositionalAudio(listener);
+        sound.setBuffer(buffer);
+        sound.setRefDistance(1);
+        sound.setVolume(volume);
+        object.mesh.add(sound);
+        sound.play();
+      }
+    });
+  }
+});
+
+game.loadLevel(new HalfPipe());
 
 // GAME LOOP
 let previousTime;
@@ -82,7 +112,7 @@ function render() {
   forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
   ball.applyImpulse(forceDirection, forcePoint);
 
-  game.update(delta);
+  game.update(delta, ball);
 
   let heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   if (heading.length() !== 0) {
