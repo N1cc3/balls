@@ -9,23 +9,19 @@ class Object extends CANNON.Body {
 
   setVisual(scene, mesh) {
     this.mesh = mesh;
-
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
     scene.add(mesh);
   }
 
   update() {
     // Update mesh according to body
-    let pos = this.position;
+    const pos = this.position;
     this.mesh.position.set(pos.x, pos.y, pos.z);
-    let quat = this.quaternion;
+    const quat = this.quaternion;
     this.mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
   }
 
   onCollide(callback) {
-    this.addEventListener('collide', function(e) {
+    this.addEventListener('collide', (e) => {
       callback(e);
     });
   }
