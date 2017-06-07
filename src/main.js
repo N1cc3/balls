@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import CANNON from 'cannon';
 import keymaster from 'keymaster';
+import XboxController from "./controllers/xbox";
 import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
 import Ball from './objects/Ball';
@@ -32,6 +33,8 @@ window.onresize = function () {
   followCamera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
+
+let controller = new XboxController();
 
 // LIGHTS
 let ambientLight = new THREE.AmbientLight(0x444444, 0.5);
@@ -121,6 +124,10 @@ function render() {
   followCamera.update(delta, heading);
 
   renderer.render(SCENE, followCamera);
-  requestAnimationFrame(render);
+
+  controller.printPressed();
+  setTimeout(function() {
+    requestAnimationFrame(render);
+  }, 1000/5);
 }
 render();
