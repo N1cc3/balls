@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
   entry: [
-    './src/main.js'
+    './src/main.js',
   ],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'app.js'
+    filename: 'app.js',
   },
   target: 'web',
   module: {
@@ -14,33 +14,10 @@ module.exports = {
       {
         loader: 'babel-loader',
         include: [
-          path.resolve(__dirname, 'src')
+          path.resolve(__dirname, 'src'),
         ],
-        test: /\.js$/
-      }
-    ]
-  }
-};
-
-const developmentConfig = () => {
-  const config = {
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          enforce: 'pre',
-          loader: 'eslint-loader',
-          options: {
-            emitWarning: true
-          }
-        }
-      ]
-    },
-    devServer: {
-      overlay: {
-        errors: true,
-        warnings: true
-      }
-    }
-  };
+        test: /\.js$/,
+      },
+    ],
+  },
 };
