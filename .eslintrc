@@ -15,7 +15,8 @@
     "no-new-object": 1,
     "quote-props": [1, "as-needed"],
     "no-array-constructor": 1,
-    "prefer-template template-curly-spacing": 1,
+    "prefer-template": 1,
+    "template-curly-spacing": 1,
     "no-eval": 2,
     "no-useless-escape": 1,
     "func-style": [1, "declaration"],
@@ -56,7 +57,7 @@
     "comma-dangle": [1, "always"],
     "semi": [2, "always"],
     "radix": [2, "always"],
-    "id-length": [1, {"min": 2}],
+    //"id-length": [1, {"min": 2}],
     "camelcase": [1, {"properties": "always"}],
     "new-cap": 1,
     "no-console": 0,
@@ -69,6 +70,6 @@
     "guard-for-in": 1,
     "no-alert": 2,
     "no-empty-function": 1,
-    "no-magic-numbers": 1
+    "no-magic-numbers": [1, { "ignore": [0, 1, -1] }]
   }
 }
