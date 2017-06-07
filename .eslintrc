@@ -1,11 +1,11 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "script"
+    "sourceType": "module"
   },
   "env": {
     "browser": true,
-    "jquery": true
+    "es6": true,
+    "node": true
   },
   "extends": "eslint:recommended",
   "rules": {
@@ -23,7 +23,6 @@
     "prefer-rest-params": 1,
     "wrap-iife": 1,
     "no-new-func": 1,
-    "space-before-blocks": [1, "always"],
     "no-param-reassign": [1, {"props": true}],
     "arrow-spacing": [1, {"before": true, "after": true}],
     "prefer-arrow-callback": 1,
