@@ -21,3 +21,26 @@ module.exports = {
     ]
   }
 };
+
+const developmentConfig = () => {
+  const config = {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          enforce: 'pre',
+          loader: 'eslint-loader',
+          options: {
+            emitWarning: true
+          }
+        }
+      ]
+    },
+    devServer: {
+      overlay: {
+        errors: true,
+        warnings: true
+      }
+    }
+  };
+};
