@@ -10,6 +10,17 @@ module.exports = {
   },
   target: 'web',
   module: {
+    rules: [
+      {
+        // enforce: "pre",
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader",
+        options: {
+          // eslint options (if necessary)
+        },
+      },
+    ],
     loaders: [
       {
         loader: 'babel-loader',
