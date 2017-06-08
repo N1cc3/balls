@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import CANNON from 'cannon';
 import keymaster from 'keymaster';
-import XboxController from "./controllers/xbox";
+import XboxController from './controllers/xbox';
 import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
 import Ball from './objects/Ball';
@@ -33,7 +33,7 @@ window.onresize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
-let controller = new XboxController();
+const controller = new XboxController();
 
 // LIGHTS
 const ambientLight = new THREE.AmbientLight(0x444444, 0.5);
@@ -127,8 +127,6 @@ function render() {
   renderer.render(SCENE, followCamera);
 
   controller.printPressed();
-  setTimeout(function() {
-    requestAnimationFrame(render);
-  }, 1000/5);
+  requestAnimationFrame(render);
 }
 render();
