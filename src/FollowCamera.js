@@ -76,8 +76,9 @@ class FollowCamera extends THREE.PerspectiveCamera {
     }
     */
 
-    if (posDiff.length() > this.baseDistance && !isNaN(delta))
+    if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
       this.truePos.lerp(thisPos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
+    }
 
 
     return this.truePos.clone().sub(targetPos);
