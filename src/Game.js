@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import CANNON from 'cannon';
 import Physics from './Physics';
 
 export const SCENE = new THREE.Scene();
@@ -13,9 +12,8 @@ class Game {
 
   update(delta) {
     PHYSICS.update(delta);
-    for (let object of this.objects) {
+    for (const object of this.objects)
       object.update();
-    }
   }
 
   addObject(object) {
@@ -24,9 +22,9 @@ class Game {
   }
 
   loadLevel(level) {
-    for (let object of level.objects) {
+    for (const object of level.objects)
       this.addObject(object);
-    }
+
     SCENE.add(level.background);
   }
 

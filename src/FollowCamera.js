@@ -25,47 +25,50 @@ class FollowCamera extends THREE.PerspectiveCamera {
 
   setTarget(target) {
     this.target = target;
-    let targetPos = this.target.position;
+    const targetPos = this.target.position;
     this.truePos = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z + this.baseDistance);
-    let posVec = this.truePos.clone().sub(targetPos).setLength(this.baseDistance).applyQuaternion(this.baseRotation);
+    const posVec = this.truePos.clone()
+      .sub(targetPos)
+      .setLength(this.baseDistance)
+      .applyQuaternion(this.baseRotation);
     this.position.copy(targetPos.clone().vadd(posVec));
     this.lookAt(targetPos);
   }
 
   update(delta, heading) {
-    let targetPos = this.target.position;
-    let posVec = this.calcPosVec(delta, heading);
+    const targetPos = this.target.position;
+    const posVec = this.calcPosVec(delta, heading);
 
     this.position.copy(targetPos.clone().vadd(posVec));
     this.lookAt(targetPos);
   }
 
   calcPosVec(delta, heading) {
-    let rotation = this.calcRotation(delta, heading);
-    let posVec = this.calcBackVec(delta);
+    const rotation = this.calcRotation(delta, heading);
+    const posVec = this.calcBackVec(delta);
 
     return posVec.applyQuaternion(rotation);
   }
 
   calcRotation(delta, heading) {
     let goalQuat;
-    if (heading.length() != 0) {
-      let axisAngleHeading = heading.set(heading.y, -heading.x, 0);
-      let maxRotDevQuat = new THREE.Quaternion().setFromAxisAngle(heading, this.maxRotDeviation);
+    if (heading.length() !== 0) {
+      heading.set(heading.y, -heading.x, 0);
+      const maxRotDevQuat = new THREE.Quaternion().setFromAxisAngle(heading, this.maxRotDeviation);
       goalQuat = this.baseRotation.clone().multiply(maxRotDevQuat);
     } else {
       goalQuat = this.baseRotation.clone();
     }
 
-    let rotDiff = quaternionAngleDiff(this.currRotation, goalQuat);
-    let t = Math.min(1, delta*(this.angVel/rotDiff));
-    return this.currRotation.slerp(goalQuat, t).clone()
+    const rotDiff = quaternionAngleDiff(this.currRotation, goalQuat);
+    const t = Math.min(1, delta*(this.angVel/rotDiff));
+    return this.currRotation.slerp(goalQuat, t).clone();
   }
 
   calcBackVec(delta) {
-    let thisPos = this.truePos.clone();
-    let targetPos = this.target.position.clone();
-    let posDiff = targetPos.vsub(thisPos);
+    const thisPos = this.truePos.clone();
+    const targetPos = this.target.position.clone();
+    const posDiff = targetPos.vsub(thisPos);
 
     /*
     if (Math.abs(Math.atan(posDiff.y/posDiff.x)) < Math.PI/4) {
@@ -73,9 +76,9 @@ class FollowCamera extends THREE.PerspectiveCamera {
     }
     */
 
-    if (posDiff.length() > this.baseDistance && !isNaN(delta)) {
+    if (posDiff.length() > this.baseDistance && !isNaN(delta))
       this.truePos.lerp(thisPos.add(posDiff), delta*this.followVel*(1 - this.baseDistance/posDiff.length()));
-    }
+
 
     return this.truePos.clone().sub(targetPos);
   }
