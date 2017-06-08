@@ -62,7 +62,7 @@ for (let i = 0; i < boxSpawnAmount; i++) {
 
 // SOUNDS
 audioLoader.load('../sounds/thump.mp3', (buffer) => {
-  for (const object of game.objects)
+  for (const object of game.objects) {
     object.onCollide((e) => {
       const contact = e.contact;
       const hitSpeed = Math.abs(contact.getImpactVelocityAlongNormal());
@@ -77,6 +77,7 @@ audioLoader.load('../sounds/thump.mp3', (buffer) => {
         sound.play();
       }
     });
+  }
 });
 
 game.loadLevel(new HalfPipe());
