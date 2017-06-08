@@ -1,7 +1,7 @@
 import CANNON from 'cannon';
 
 const FPS = 60;
-const PHYSICS_DELTA = 1000 / FPS;
+const PHYSICS_DELTA = 1 / FPS;
 const GRAVITY = -9.81;
 
 export const AIR_RESISTANCE = 0.1;
@@ -29,8 +29,7 @@ class Physics extends CANNON.World {
   }
 
   update(delta) {
-    const deltaInSeconds = delta * 1000;
-    this.step(PHYSICS_DELTA, deltaInSeconds);
+    this.step(PHYSICS_DELTA, delta / 1000);
   }
 
 }
