@@ -8,7 +8,7 @@ class Level {
   add(object) {
     this.objects.push(object);
   }
-  
+
   setBackground(background) {
     this.background = background;
   }
