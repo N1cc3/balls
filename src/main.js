@@ -6,7 +6,7 @@ import Box from './objects/Box';
 import Ball from './objects/Ball';
 import Game from './Game';
 import {SCENE,} from './Game';
-import HalfPipe from './levels/HalfPipe';
+import Tunnel from './levels/Tunnel';
 
 // SCENE, CAMERA, RENDERER
 const game = new Game();
@@ -80,7 +80,7 @@ audioLoader.load('../sounds/thump.mp3', (buffer) => {
   }
 });
 
-game.loadLevel(new HalfPipe());
+game.loadLevel(new Tunnel());
 
 // GAME LOOP
 let previousTime;
