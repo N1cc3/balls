@@ -73,6 +73,7 @@
     "no-empty-function": 1,
     "yoda": [1, "never"],
     "class-methods-use-this": 2,
+    "no-use-before-define": [1, {"functions": false}],
     #"no-magic-numbers": [1, { "ignore": [0, 1, -1] }],
     # "max-len": [1, {"code": 80}],
     # "id-length": [1, {"min": 2}],
