@@ -20,7 +20,7 @@ class Pipe extends Object {
   constructor(radius,
               length,
               thickness = 0.2,
-              resolution = 32,
+              resolution = 16,
               sector = 1,
               startAngle = 0,
               color = '#00ff00') {
@@ -31,14 +31,17 @@ class Pipe extends Object {
     });
 
     const sectorAngle = 2 * Math.PI * sector / resolution;
-    const width = 0.4 * radius * Math.cos(sectorAngle);
+    const width = 2 * radius * Math.sin(sectorAngle) / Math.sin((Math.PI - sectorAngle) / 2);
+    const sagitta = radius - Math.sqrt(radius * radius - (width / 2) * (width / 2));
 
     const group = new THREE.Group();
     const material = new THREE.MeshStandardMaterial({color: color,});
 
     for (let i = 0; i < resolution; i++) {
-      const direction = startAngle + i * sectorAngle;
+      const direction = sectorAngle / 2 + startAngle + i * sectorAngle;
       const offset = new THREE.Vector3(2 * radius * Math.sin(direction), 2 * -radius * Math.cos(direction), 0);
+      const directionVector = (new THREE.Vector3(0, -1, 0)).applyAxisAngle(new THREE.Vector3(0, 0, 1), direction);
+      offset.sub(directionVector.multiplyScalar(sagitta));
 
       // Visual
       const geometry = new THREE.BoxGeometry(width, thickness, length);
