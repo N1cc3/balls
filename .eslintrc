@@ -67,7 +67,7 @@
     "array-callback-return": 1,
     "block-scoped-var": 2,
     "consistent-return": 2,
-    "curly": [1, "multi-or-nest", "consistent"],
+    "curly": [1, "multi-line"],
     "guard-for-in": 1,
     "no-alert": 2,
     "no-empty-function": 1,
