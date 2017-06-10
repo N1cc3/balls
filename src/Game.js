@@ -12,8 +12,9 @@ class Game {
 
   update(delta) {
     PHYSICS.update(delta);
-    for (const object of this.objects)
+    for (const object of this.objects) {
       object.update();
+    }
   }
 
   addObject(object) {
@@ -22,8 +23,9 @@ class Game {
   }
 
   loadLevel(level) {
-    for (const object of level.objects)
+    for (const object of level.objects) {
       this.addObject(object);
+    }
 
     SCENE.add(level.background);
   }

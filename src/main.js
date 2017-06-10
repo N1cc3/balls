@@ -101,6 +101,9 @@ function render() {
   if (right) ball.velocity.vadd(new CANNON.Vec3(1, 0, 0), ball.velocity);
 
   game.update(delta, ball);
+  
+  // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
+  // if (heading.length() !== 0) heading.normalize();
 
   followCamera.update(delta, new THREE.Vector3());
 
