@@ -41,7 +41,7 @@ class Pipe extends Object {
       const direction = sectorAngle / 2 + startAngle + i * sectorAngle;
       const offset = new THREE.Vector3(radius * Math.sin(direction), -radius * Math.cos(direction), 0);
       const directionVector = (new THREE.Vector3(0, -1, 0)).applyAxisAngle(new THREE.Vector3(0, 0, 1), direction);
-      offset.sub(directionVector.multiplyScalar(sagitta));
+      offset.sub(directionVector.setLength(sagitta));
 
       // Visual
       const geometry = new THREE.BoxGeometry(width, thickness, length);
