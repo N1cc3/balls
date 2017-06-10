@@ -6,7 +6,7 @@ import Box from './objects/Box';
 import Ball from './objects/Ball';
 import Game from './Game';
 import {SCENE,} from './Game';
-import HalfPipe from './levels/HalfPipe';
+import Tunnel from './levels/Tunnel';
 
 // SCENE, CAMERA, RENDERER
 const game = new Game();
@@ -80,7 +80,7 @@ audioLoader.load('../sounds/thump.mp3', (buffer) => {
   }
 });
 
-game.loadLevel(new HalfPipe());
+game.loadLevel(new Tunnel());
 
 // GAME LOOP
 let previousTime;
@@ -95,23 +95,17 @@ function render() {
   const left = keymaster.isPressed('a');
   const right = keymaster.isPressed('d');
 
-  const forceDirection = new CANNON.Vec3(0, 0, 0);
-  if (up) forceDirection.vadd(new CANNON.Vec3(0, 0, -1), forceDirection);
-  if (down) forceDirection.vadd(new CANNON.Vec3(0, 0, 1), forceDirection);
-  if (left) forceDirection.vadd(new CANNON.Vec3(-1, 0, 0), forceDirection);
-  if (right) forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
-
-  const forcePoint = forceDirection.clone().negate();
-  const pos = ball.position;
-  forcePoint.vadd(new CANNON.Vec3(pos.x, pos.y, pos.z));
-  ball.applyImpulse(forceDirection, forcePoint);
+  if (up) ball.velocity.vadd(new CANNON.Vec3(0, 0, -1), ball.velocity);
+  if (down) ball.velocity.vadd(new CANNON.Vec3(0, 0, 1), ball.velocity);
+  if (left) ball.velocity.vadd(new CANNON.Vec3(-1, 0, 0), ball.velocity);
+  if (right) ball.velocity.vadd(new CANNON.Vec3(1, 0, 0), ball.velocity);
 
   game.update(delta, ball);
+  
+  // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
+  // if (heading.length() !== 0) heading.normalize();
 
-  const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
-  if (heading.length() !== 0) heading.normalize();
-
-  followCamera.update(delta, heading);
+  followCamera.update(delta, new THREE.Vector3());
 
   renderer.render(SCENE, followCamera);
   requestAnimationFrame(render);
