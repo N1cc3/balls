@@ -31,7 +31,7 @@ class Pipe extends Object {
     });
 
     const sectorAngle = 2 * Math.PI * sector / resolution;
-    const width = 2 * radius * Math.sin(sectorAngle) / Math.sin((Math.PI - sectorAngle) / 2);
+    const width = 2 * radius * Math.sin(sectorAngle / 2);
     const sagitta = radius - Math.sqrt(radius * radius - (width / 2) * (width / 2));
 
     const group = new THREE.Group();
@@ -39,7 +39,7 @@ class Pipe extends Object {
 
     for (let i = 0; i < resolution; i++) {
       const direction = sectorAngle / 2 + startAngle + i * sectorAngle;
-      const offset = new THREE.Vector3(2 * radius * Math.sin(direction), 2 * -radius * Math.cos(direction), 0);
+      const offset = new THREE.Vector3(radius * Math.sin(direction), -radius * Math.cos(direction), 0);
       const directionVector = (new THREE.Vector3(0, -1, 0)).applyAxisAngle(new THREE.Vector3(0, 0, 1), direction);
       offset.sub(directionVector.multiplyScalar(sagitta));
 
