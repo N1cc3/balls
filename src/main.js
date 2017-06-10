@@ -34,6 +34,9 @@ window.onresize = () => {
 };
 
 const controller = new XboxController();
+controller.onButton('axis_left', (event) => {
+  console.log(event.value);
+});
 
 // LIGHTS
 const ambientLight = new THREE.AmbientLight(0x444444, 0.5);
@@ -93,6 +96,7 @@ function render() {
   previousTime = time;
 
   // PLAYER CONTROLS
+  controller.handleInput();
   const up = keymaster.isPressed('w');
   const down = keymaster.isPressed('s');
   const left = keymaster.isPressed('a');
@@ -118,7 +122,6 @@ function render() {
 
   renderer.render(SCENE, followCamera);
 
-  controller.printPressed();
   requestAnimationFrame(render);
 }
 render();
