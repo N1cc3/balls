@@ -99,17 +99,10 @@ function render() {
   const right = keymaster.isPressed('d');
 
   const forceDirection = new CANNON.Vec3(0, 0, 0);
-  if (up)
-    forceDirection.vadd(new CANNON.Vec3(0, 0, -1), forceDirection);
-
-  if (down)
-    forceDirection.vadd(new CANNON.Vec3(0, 0, 1), forceDirection);
-
-  if (left)
-    forceDirection.vadd(new CANNON.Vec3(-1, 0, 0), forceDirection);
-
-  if (right)
-    forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
+  if (up) forceDirection.vadd(new CANNON.Vec3(0, 0, -1), forceDirection);
+  if (down) forceDirection.vadd(new CANNON.Vec3(0, 0, 1), forceDirection);
+  if (left) forceDirection.vadd(new CANNON.Vec3(-1, 0, 0), forceDirection);
+  if (right) forceDirection.vadd(new CANNON.Vec3(1, 0, 0), forceDirection);
 
   const forcePoint = forceDirection.clone().negate();
   const pos = ball.position;
@@ -119,8 +112,7 @@ function render() {
   game.update(delta, ball);
 
   const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
-  if (heading.length() !== 0)
-    heading.normalize();
+  if (heading.length() !== 0) heading.normalize();
 
   followCamera.update(delta, heading);
 
