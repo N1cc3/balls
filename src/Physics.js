@@ -4,7 +4,7 @@ import * as THREE from 'three';
 const FPS = 60;
 const PHYSICS_DELTA = 1 / FPS;
 const GRAVITY = new CANNON.Vec3(0, -9.81, 0);
-const MAX_PUSH = 1/8 * Math.PI;
+const MAX_PUSH = 2/8 * Math.PI;
 
 export const AIR_RESISTANCE = 0.1;
 export const MATERIALS = {
@@ -41,7 +41,7 @@ class Physics extends CANNON.World {
    * @param  {Number} pushAxisZ Push sidewards. Give -1 to 1. Positive is right.
    */
   controlGravity(xAxis, zAxis) {
-    const vector = (new THREE.Vector3()).copy(GRAVITY);
+    const vector = (new THREE.Vector3()).copy(this.gravity);
     vector.applyAxisAngle(new THREE.Vector3(1, 0, 0), xAxis * MAX_PUSH);
     vector.applyAxisAngle(new THREE.Vector3(0, 0, 1), zAxis * MAX_PUSH);
     this.gravity.copy(vector);
