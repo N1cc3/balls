@@ -23,8 +23,8 @@ const buttons = {
 // The first axis is x, and the second is y.
 // Negative x is left, negative y is up.
 const axes = {
-  axis_left: [0, 1,],
-  axis_right: [2, 3,],
+  axis_left: [0, 1,], // eslint-disable-line camelcase
+  axis_right: [2, 3,], // eslint-disable-line camelcase
 };
 
 const events = {
@@ -32,11 +32,10 @@ const events = {
   axis: [],
 };
 
-const callbacks = new Map();
-
 class XboxController {
 
   constructor() {
+    this.callbacks = new Map();
     this.gamepadIdx = null;
     window.addEventListener('gamepadconnected', (event) => this.connectGamepad(event), false);
     window.addEventListener('gamepaddisconnected', (event) => this.disconnectGamePad(event), false);
@@ -78,14 +77,14 @@ class XboxController {
   }
 
   onButton(button, callback) {
-    callbacks.set(button, callback);
+    this.callbacks.set(button, callback);
   }
 
   handleEvents() {
     Object.values(events).forEach((eventArr) => {
       eventArr.forEach((event) => {
-        if (callbacks.has(event.button)) {
-          const callback = callbacks.get(event.button);
+        if (this.callbacks.has(event.button)) {
+          const callback = this.callbacks.get(event.button);
           callback({
             value: event.value,
           });
