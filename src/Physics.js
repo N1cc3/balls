@@ -37,8 +37,8 @@ class Physics extends CANNON.World {
 
   /**
    * Pushes gravity to given direction.
-   * @param  {Number} pushAxisX Push forwards. Give -1 to 1. Positive is forwards.
-   * @param  {Number} pushAxisZ Push sidewards. Give -1 to 1. Positive is right.
+   * @param  {Number} xAxis Push forwards. Give -1 to 1. Positive is forwards.
+   * @param  {Number} zAxis Push sidewards. Give -1 to 1. Positive is right.
    */
   controlGravity(xAxis, zAxis) {
     const vector = (new THREE.Vector3()).copy(this.gravity);
