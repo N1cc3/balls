@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import CANNON from 'cannon';
+// import CANNON from 'cannon';
 import keymaster from 'keymaster';
 import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
 import Ball from './objects/Ball';
 import Game from './Game';
-import {SCENE,} from './Game';
+import {SCENE, PHYSICS,} from './Game';
 import Tunnel from './levels/Tunnel';
 
 // SCENE, CAMERA, RENDERER
@@ -95,13 +95,13 @@ function render() {
   const left = keymaster.isPressed('a');
   const right = keymaster.isPressed('d');
 
-  if (up) ball.velocity.vadd(new CANNON.Vec3(0, 0, -1), ball.velocity);
-  if (down) ball.velocity.vadd(new CANNON.Vec3(0, 0, 1), ball.velocity);
-  if (left) ball.velocity.vadd(new CANNON.Vec3(-1, 0, 0), ball.velocity);
-  if (right) ball.velocity.vadd(new CANNON.Vec3(1, 0, 0), ball.velocity);
+  if (up) PHYSICS.controlGravity(1, 0);
+  if (down) PHYSICS.controlGravity(-1, 0);
+  if (left) PHYSICS.controlGravity(0, -1);
+  if (right) PHYSICS.controlGravity(0, 1);
 
   game.update(delta, ball);
-  
+
   // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   // if (heading.length() !== 0) heading.normalize();
 
