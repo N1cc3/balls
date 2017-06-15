@@ -43,12 +43,17 @@ const ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(25, 50, 25);
 light.castShadow = true;
-light.shadow.camera.left = -20;
-light.shadow.camera.right = 20;
-light.shadow.camera.top = 20;
-light.shadow.camera.bottom = -20;
 SCENE.add(ambientLight);
 SCENE.add(light);
+
+light.shadow.mapSize.width = 4096;
+light.shadow.mapSize.height = 4096;
+light.shadow.camera.near = 1;
+light.shadow.camera.far = 100;
+light.shadow.camera.left = -20;
+light.shadow.camera.right = 20;
+light.shadow.camera.down = -20;
+light.shadow.camera.top = 20;
 
 // GAME OBJECTS
 const ball = new Ball(0.05, 32, '#ff0000');
