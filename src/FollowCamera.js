@@ -6,11 +6,11 @@ class FollowCamera extends THREE.PerspectiveCamera {
               maxRotDeviation = 30*(Math.PI/180),
               followVel = 0.01,
               angVel = 0.002,
-              baseDistance = 10,
+              baseDistance = 1,
               fov = 75,
               aspect = window.innerWidth / window.innerHeight,
-              near = 0.1,
-              far = 10000) {
+              near = 0.001,
+              far = 100) {
     super(fov, aspect, near, far);
 
     this.truePos = null;

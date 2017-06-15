@@ -51,8 +51,8 @@ SCENE.add(ambientLight);
 SCENE.add(light);
 
 // GAME OBJECTS
-const ball = new Ball(1, 32, '#ff0000');
-ball.position.set(0, 5, 10);
+const ball = new Ball(0.05, 32, '#ff0000');
+ball.position.set(0, 0.1, 0.2);
 
 followCamera.setTarget(ball);
 
@@ -61,8 +61,8 @@ game.addObject(ball);
 
 const boxSpawnAmount = 10;
 for (let i = 0; i < boxSpawnAmount; i++) {
-  const box = new Box(1, 1, 1, '#ffff00');
-  box.position.set(-5 + i, 5 + 0.2 * i, 0);
+  const box = new Box(0.1, 0.1, 0.1, '#ffff00');
+  box.position.set(0, 0.2, -0.2 * i);
   game.addObject(box);
 }
 
