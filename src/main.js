@@ -14,7 +14,7 @@ const game = new Game();
 let aspect = window.innerWidth / window.innerHeight;
 const followCamera = new StaticRotationFollowCamera();
 followCamera.position.z = 1;
-followCamera.position.y = 2;
+followCamera.position.y = 1;
 
 const audioLoader = new THREE.AudioLoader();
 const listener = new THREE.AudioListener();
