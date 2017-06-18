@@ -10,6 +10,14 @@ class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
     this.baseDistance = 1;
   }
 
+  /**
+   * Moves camera target towards targetPos and rotates camera to keep base rotation.
+   * @param  {THREE.Vector3} targetPos
+   */
+  update(targetPos) {
+    this.lookAt(targetPos);
+  }
+
 }
 
 export default StaticRotationFollowCamera;
