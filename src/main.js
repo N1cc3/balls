@@ -2,7 +2,7 @@ import * as THREE from 'three';
 // import CANNON from 'cannon';
 import keymaster from 'keymaster';
 import XboxController from './controllers/xbox';
-import FollowCamera from './FollowCamera';
+import StaticRotationFollowCamera from './StaticRotationFollowCamera';
 import Box from './objects/Box';
 import Ball from './objects/Ball';
 import Game from './Game';
@@ -12,8 +12,9 @@ import Tunnel from './levels/Tunnel';
 // SCENE, CAMERA, RENDERER
 const game = new Game();
 let aspect = window.innerWidth / window.innerHeight;
-const followCamera = new FollowCamera();
-followCamera.position.z = 20;
+const followCamera = new StaticRotationFollowCamera();
+followCamera.position.z = 1;
+followCamera.position.y = 2;
 
 const audioLoader = new THREE.AudioLoader();
 const listener = new THREE.AudioListener();
@@ -59,7 +60,7 @@ light.shadow.camera.top = 20;
 const ball = new Ball(0.05, 32, '#ff0000');
 ball.position.set(0, 0.1, 0.2);
 
-followCamera.setTarget(ball);
+// followCamera.setTarget(ball);
 
 // PHYSICS
 game.addObject(ball);
@@ -117,7 +118,7 @@ function render() {
   // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   // if (heading.length() !== 0) heading.normalize();
 
-  followCamera.update(delta, new THREE.Vector3());
+  followCamera.update(ball.position);
 
   renderer.render(SCENE, followCamera);
 
