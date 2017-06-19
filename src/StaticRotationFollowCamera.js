@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {Utils,} from './Utils';
 
 const POSITION_VELOCITY = 0.1;
-const ROTATION_VELOCITY = 0.2;
+const ROTATION_VELOCITY = 0.2; // This should be larger than POSITION_VELOCITY.
 
 class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
 
