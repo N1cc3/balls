@@ -60,7 +60,7 @@ light.shadow.camera.top = 20;
 //const ball = new Ball(0.05, 32, '#ff0000');
 //ball.position.set(0, 0.1, 0.2);
 
-const player = new Player(2, 0.05, 32, '#ff0000');
+const player = new Player(15, 0.05, 32, '#ff0000');
 
 followCamera.setTarget(player);
 
