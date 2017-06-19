@@ -2,12 +2,14 @@ import * as THREE from 'three';
 import {Utils,} from './Utils';
 
 const POSITION_VELOCITY = 0.1;
+const ROTATION_VELOCITY = 0.2;
 
 class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
 
   constructor(fov = 75, aspect = window.innerWidth / window.innerHeight, near = 0.001, far = 100) {
     super(fov, aspect, near, far);
     this.offset = new THREE.Vector3(0, 1, 1);
+    this.oldTargetPosition = new THREE.Vector3();
   }
 
   /**
@@ -19,7 +21,10 @@ class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
     const targetCameraPosition = targetPosition.clone();
     targetCameraPosition.add(this.offset);
     this.position.lerp(targetCameraPosition, POSITION_VELOCITY);
-    this.lookAt(targetPosition);
+    const lerpedTargetPosition = this.oldTargetPosition.clone();
+    lerpedTargetPosition.lerp(targetPosition, ROTATION_VELOCITY);
+    this.lookAt(lerpedTargetPosition);
+    this.oldTargetPosition.copy(lerpedTargetPosition);
   }
 
 }
