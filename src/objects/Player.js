@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import CANNON from 'cannon';
 import Ball from './Ball';
 
