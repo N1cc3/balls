@@ -96,8 +96,20 @@ audioLoader.load('../sounds/thump.mp3', (buffer) => {
 
 game.loadLevel(new Tunnel());
 
+const DEBUG = true;
+
+// Format debugging text
+let text;
+let fps = 60.0;
+if (DEBUG) {
+  text = document.createElement('div');
+  text.className = 'debug';
+  text.innerHTML = 'Loading...';
+  document.body.appendChild(text);
+}
+
 // GAME LOOP
-let previousTime;
+let previousTime = new Date().getTime();
 function render() {
   const time = new Date().getTime();
   const delta = time - previousTime;
@@ -123,6 +135,13 @@ function render() {
   followCamera.update(player.position);
 
   renderer.render(SCENE, followCamera);
+
+  // Update debugging text
+  if (DEBUG) {
+    fps = fps * 9.0 / 10.0;
+    fps += (100 / (Math.max(delta, 0.01)));
+    text.innerHTML = `delta: ${delta}<br/>fps: ${fps}`;
+  }
 
   requestAnimationFrame(render);
 }
