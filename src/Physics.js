@@ -1,7 +1,7 @@
 import CANNON from 'cannon';
 import * as THREE from 'three';
 
-const FPS = 60;
+const FPS = 120;
 const PHYSICS_DELTA = 1 / FPS;
 const GRAVITY = new CANNON.Vec3(0, -9.81, 0);
 const MAX_PUSH = 2/8 * Math.PI;

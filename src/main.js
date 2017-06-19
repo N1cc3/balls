@@ -43,16 +43,21 @@ const ambientLight = new THREE.AmbientLight(0x444444, 0.5);
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(25, 50, 25);
 light.castShadow = true;
-light.shadow.camera.left = -20;
-light.shadow.camera.right = 20;
-light.shadow.camera.top = 20;
-light.shadow.camera.bottom = -20;
 SCENE.add(ambientLight);
 SCENE.add(light);
 
+light.shadow.mapSize.width = 4096;
+light.shadow.mapSize.height = 4096;
+light.shadow.camera.near = 1;
+light.shadow.camera.far = 100;
+light.shadow.camera.left = -20;
+light.shadow.camera.right = 20;
+light.shadow.camera.down = -20;
+light.shadow.camera.top = 20;
+
 // GAME OBJECTS
-const ball = new Ball(1, 32, '#ff0000');
-ball.position.set(0, 5, 10);
+const ball = new Ball(0.05, 32, '#ff0000');
+ball.position.set(0, 0.1, 0.2);
 
 followCamera.setTarget(ball);
 
@@ -61,8 +66,8 @@ game.addObject(ball);
 
 const boxSpawnAmount = 10;
 for (let i = 0; i < boxSpawnAmount; i++) {
-  const box = new Box(1, 1, 1, '#ffff00');
-  box.position.set(-5 + i, 5 + 0.2 * i, 0);
+  const box = new Box(0.1, 0.1, 0.1, '#ffff00');
+  box.position.set(0, 0.2, -0.2 * i);
   game.addObject(box);
 }
 
