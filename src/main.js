@@ -4,7 +4,8 @@ import keymaster from 'keymaster';
 import XboxController from './controllers/xbox';
 import StaticRotationFollowCamera from './StaticRotationFollowCamera';
 import Box from './objects/Box';
-import Ball from './objects/Ball';
+// import Ball from './objects/Ball';
+import Player from './Player';
 import Game from './Game';
 import {SCENE, PHYSICS,} from './Game';
 import Tunnel from './levels/Tunnel';
@@ -57,13 +58,14 @@ light.shadow.camera.down = -20;
 light.shadow.camera.top = 20;
 
 // GAME OBJECTS
-const ball = new Ball(0.05, 32, '#ff0000');
-ball.position.set(0, 0.1, 0.2);
+// const ball = new Ball(0.05, 32, '#ff0000');
+// ball.position.set(0, 0.1, 0.2);
 
-// followCamera.setTarget(ball);
+const player = new Player(15, 0.05, 32, '#ff0000');
 
 // PHYSICS
-game.addObject(ball);
+// game.addObject(ball);
+game.setPlayer(player);
 
 const boxSpawnAmount = 10;
 for (let i = 0; i < boxSpawnAmount; i++) {
@@ -113,12 +115,12 @@ function render() {
   if (left) PHYSICS.controlGravity(0, -1);
   if (right) PHYSICS.controlGravity(0, 1);
 
-  game.update(delta, ball);
+  game.update(delta);
 
   // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   // if (heading.length() !== 0) heading.normalize();
 
-  followCamera.update(ball.position);
+  followCamera.update(player.position);
 
   renderer.render(SCENE, followCamera);
 
