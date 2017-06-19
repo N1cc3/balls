@@ -6,7 +6,7 @@ const ROTATION_VELOCITY = 0.2;
 
 class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
 
-  constructor(fov = 75, aspect = window.innerWidth / window.innerHeight, near = 0.001, far = 100) {
+  constructor(fov = 75, aspect = window.innerWidth / window.innerHeight, near = 0.1, far = 50) {
     super(fov, aspect, near, far);
     this.offset = new THREE.Vector3(0, 1, 1);
     this.oldTargetPosition = new THREE.Vector3();
