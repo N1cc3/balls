@@ -4,7 +4,7 @@ import keymaster from 'keymaster';
 import XboxController from './controllers/xbox';
 import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
-import Ball from './objects/Ball';
+// import Ball from './objects/Ball';
 import Player from './objects/Player';
 import Game from './Game';
 import {SCENE, PHYSICS,} from './Game';
@@ -57,15 +57,15 @@ light.shadow.camera.down = -20;
 light.shadow.camera.top = 20;
 
 // GAME OBJECTS
-//const ball = new Ball(0.05, 32, '#ff0000');
-//ball.position.set(0, 0.1, 0.2);
+// const ball = new Ball(0.05, 32, '#ff0000');
+// ball.position.set(0, 0.1, 0.2);
 
 const player = new Player(15, 0.05, 32, '#ff0000');
 
 followCamera.setTarget(player);
 
 // PHYSICS
-//game.addObject(ball);
+// game.addObject(ball);
 game.setPlayer(player);
 
 const boxSpawnAmount = 10;
