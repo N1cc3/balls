@@ -8,12 +8,21 @@ class Game {
 
   constructor() {
     this.objects = [];
+    this.player = null;
   }
 
   update(delta) {
     PHYSICS.update(delta);
+    this.player.update();
     for (const object of this.objects) {
       object.update();
+    }
+  }
+
+  setPlayer(player) {
+    this.player = player;
+    for (const ball of player.balls) {
+      this.addObject(ball);
     }
   }
 
