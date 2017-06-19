@@ -109,9 +109,9 @@ if (DEBUG) {
 }
 
 // GAME LOOP
-let previousTime = new Date().getTime();
+let previousTime = window.performance.now();
 function render() {
-  const time = new Date().getTime();
+  const time = window.performance.now();
   const delta = time - previousTime;
   previousTime = time;
 
