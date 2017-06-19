@@ -1,5 +1,5 @@
 import CANNON from 'cannon';
-import Ball from './Ball';
+import Ball from './objects/Ball';
 
 class Player {
 

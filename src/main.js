@@ -5,7 +5,7 @@ import XboxController from './controllers/xbox';
 import FollowCamera from './FollowCamera';
 import Box from './objects/Box';
 // import Ball from './objects/Ball';
-import Player from './objects/Player';
+import Player from './Player';
 import Game from './Game';
 import {SCENE, PHYSICS,} from './Game';
 import Tunnel from './levels/Tunnel';
