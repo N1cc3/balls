@@ -120,7 +120,7 @@ function render() {
   // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
   // if (heading.length() !== 0) heading.normalize();
 
-  followCamera.update(ball.position);
+  followCamera.update(player.position);
 
   renderer.render(SCENE, followCamera);
 
