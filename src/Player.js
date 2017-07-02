@@ -7,6 +7,7 @@ class Player {
     this.n = n;
     this.balls = [];
     this.position = new CANNON.Vec3();
+    this.points = 0;
 
     const d = 2*r;
     for (let i = 0; i < n; i++) {
@@ -25,6 +26,10 @@ class Player {
     }
     center = center.scale(1/this.n);
     this.position = center;
+  }
+
+  addPoints(points) {
+    this.points += points;
   }
 
 }

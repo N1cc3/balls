@@ -50,6 +50,8 @@ class Game {
     for (const ball of this.player.balls) {
       level.addFinishableObject(ball, (object) => {
         object.markToBeRemoved();
+        this.player.addPoints(1);
+        console.log(`Points: ${this.player.points}`);
       });
     }
 
