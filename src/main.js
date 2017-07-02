@@ -1,10 +1,8 @@
 import * as THREE from 'three';
-// import CANNON from 'cannon';
 import keymaster from 'keymaster';
 import XboxController from './controllers/xbox';
 import StaticRotationFollowCamera from './StaticRotationFollowCamera';
 import Box from './objects/Box';
-// import Ball from './objects/Ball';
 import Player from './Player';
 import Game from './Game';
 import {SCENE, PHYSICS,} from './Game';
@@ -57,15 +55,16 @@ light.shadow.camera.right = 20;
 light.shadow.camera.down = -20;
 light.shadow.camera.top = 20;
 
-// GAME OBJECTS
-// const ball = new Ball(0.05, 32, '#ff0000');
-// ball.position.set(0, 0.1, 0.2);
+// PLAYER
 
 const player = new Player(15, 0.05, 32, '#ff0000');
-
-// PHYSICS
-// game.addObject(ball);
 game.setPlayer(player);
+
+// LEVEL
+
+game.loadLevel(new Tunnel());
+
+// OBSTACLES
 
 const boxSpawnAmount = 10;
 for (let i = 0; i < boxSpawnAmount; i++) {
@@ -94,8 +93,6 @@ audioLoader.load('../sounds/thump.mp3', (buffer) => {
   }
 });
 
-game.loadLevel(new Tunnel());
-
 // GAME LOOP
 let previousTime;
 function render() {
@@ -116,9 +113,6 @@ function render() {
   if (right) PHYSICS.controlGravity(0, 1);
 
   game.update(delta);
-
-  // const heading = new THREE.Vector3(forceDirection.x, forceDirection.z, 0);
-  // if (heading.length() !== 0) heading.normalize();
 
   followCamera.update(player.position);
 

@@ -21,7 +21,6 @@ class Level {
    */
   setFinish(body) {
     this.finish = body;
-    console.log(this.finish);
   }
 
   /**
