@@ -4,7 +4,6 @@ import Ball from './objects/Ball';
 class Player {
 
   constructor(n, r, segments, color) {
-    this.n = n;
     this.balls = [];
     this.position = new CANNON.Vec3();
     this.points = 0;
@@ -24,7 +23,7 @@ class Player {
     for (const ball of this.balls) {
       center = center.vadd(ball.position);
     }
-    center = center.scale(1/this.n);
+    center = center.scale(1/this.balls.length);
     this.position = center;
   }
 

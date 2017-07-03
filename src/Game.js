@@ -50,6 +50,10 @@ class Game {
     for (const ball of this.player.balls) {
       level.addFinishableObject(ball, (object) => {
         object.markToBeRemoved();
+        const index = this.player.balls.indexOf(object);
+        if (index > -1) {
+          this.player.balls.splice(index, 1);
+        }
         this.player.addPoints(1);
         console.log(`Points: ${this.player.points}`);
       });
