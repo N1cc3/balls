@@ -4,7 +4,6 @@ class Level {
     this.objects = [];
     this.background = null;
     this.finish = null;
-    this.playerObjects = [];
   }
 
   add(object) {
@@ -15,10 +14,6 @@ class Level {
     this.background = background;
   }
 
-  /**
-   * When any of this.playerObjects collides with given body it is considered as reached finish.
-   * @param {CANNON.Body} body
-   */
   setFinish(body) {
     this.finish = body;
   }
