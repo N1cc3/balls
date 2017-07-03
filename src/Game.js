@@ -25,7 +25,7 @@ class Game {
       if (object.isToBeRemoved) {
         PHYSICS.removeBody(object);
         SCENE.remove(object.mesh);
-        Utils.removeElementFromArray(object.mesh, this.objects);
+        Utils.removeElementFromArray(object, this.objects);
         this.player.removeBall(object);
       } else {
         object.update();
