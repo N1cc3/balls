@@ -1,5 +1,6 @@
 import CANNON from 'cannon';
 import Ball from './objects/Ball';
+import {Utils,} from './Utils';
 
 const DEADZONE_DISTANCE = 5;
 
@@ -46,10 +47,7 @@ class Player {
    * @param {Object} ball
    */
   removeBall(ball) {
-    const index = this.balls.indexOf(ball);
-    if (index > -1) {
-      this.balls.splice(index, 1);
-    }
+    Utils.removeElementFromArray(ball, this.balls);
   }
 
 }

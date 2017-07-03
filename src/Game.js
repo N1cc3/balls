@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Physics from './Physics';
+import {Utils,} from './Utils';
 
 export const SCENE = new THREE.Scene();
 export const PHYSICS = new Physics();
@@ -18,10 +19,7 @@ class Game {
       if (object.isToBeRemoved) {
         PHYSICS.removeBody(object);
         SCENE.remove(object.mesh);
-        const index = this.objects.indexOf(object.mesh);
-        if (index > -1) {
-          this.object.splice(index, 1);
-        }
+        Utils.removeElementFromArray(object.mesh, this.objects);
         this.player.removeBall(object);
       } else {
         object.update();
