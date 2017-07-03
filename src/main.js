@@ -114,6 +114,7 @@ function render() {
 
   game.update(delta);
 
+  followCamera.setOffset(followCamera.baseOffset.clone().multiplyScalar(1 + Math.sqrt(player.scatter)));
   followCamera.update(player.position);
 
   renderer.render(SCENE, followCamera);
