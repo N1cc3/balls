@@ -41,6 +41,17 @@ class Player {
     this.points += points;
   }
 
+  /**
+   * Checks if given Object is in this.balls and removes it if found.
+   * @param {Object} ball
+   */
+  removeBall(ball) {
+    const index = this.balls.indexOf(ball);
+    if (index > -1) {
+      this.balls.splice(index, 1);
+    }
+  }
+
 }
 
 export default Player;

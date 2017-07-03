@@ -22,11 +22,7 @@ class Game {
         if (index > -1) {
           this.object.splice(index, 1);
         }
-        // Remove from player balls list
-        const index2 = this.player.balls.indexOf(object);
-        if (index2 > -1) {
-          this.player.balls.splice(index2, 1);
-        }
+        this.player.removeBall(object);
       } else {
         object.update();
       }
