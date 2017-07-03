@@ -1,6 +1,8 @@
 import CANNON from 'cannon';
 import Ball from './objects/Ball';
 
+const DEADZONE_DISTANCE = 5;
+
 class Player {
 
   constructor(n, r, segments, color) {
@@ -25,6 +27,14 @@ class Player {
     }
     center = center.scale(1/this.balls.length);
     this.position = center;
+
+    // Remove balls too far from center
+    for (const ball of this.balls) {
+      const distance = this.position.distanceTo(ball.position);
+      if (distance > DEADZONE_DISTANCE) {
+        ball.markToBeRemoved();
+      }
+    }
   }
 
   addPoints(points) {
