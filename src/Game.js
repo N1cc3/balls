@@ -10,12 +10,18 @@ class Game {
   constructor() {
     this.objects = [];
     this.player = null;
+    this.level = null;
   }
 
   update(delta) {
     PHYSICS.update(delta);
     this.player.update();
     for (const object of this.objects) {
+      // Level deadzone check
+      if (object.position.length() > this.level.deadzoneDistance) {
+        object.markToBeRemoved();
+      }
+
       if (object.isToBeRemoved) {
         PHYSICS.removeBody(object);
         SCENE.remove(object.mesh);
@@ -40,6 +46,8 @@ class Game {
   }
 
   loadLevel(level) {
+    this.level = level;
+
     for (const object of level.objects) {
       this.addObject(object);
     }

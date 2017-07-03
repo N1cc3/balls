@@ -4,6 +4,7 @@ class Level {
     this.objects = [];
     this.background = null;
     this.finish = null;
+    this.deadzoneDistance = 50;
   }
 
   add(object) {
@@ -29,6 +30,10 @@ class Level {
         callback(object);
       }
     });
+  }
+
+  setDeadzoneDistance(distance) {
+    this.deadzoneDistance = distance;
   }
 
 }
