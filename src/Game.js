@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Physics from './Physics';
+import {Utils,} from './Utils';
 
 export const SCENE = new THREE.Scene();
 export const PHYSICS = new Physics();
@@ -9,19 +10,23 @@ class Game {
   constructor() {
     this.objects = [];
     this.player = null;
+    this.level = null;
   }
 
   update(delta) {
     PHYSICS.update(delta);
     this.player.update();
     for (const object of this.objects) {
+      // Level deadzone check
+      if (object.position.length() > this.level.deadzoneDistance) {
+        object.markToBeRemoved();
+      }
+
       if (object.isToBeRemoved) {
         PHYSICS.removeBody(object);
         SCENE.remove(object.mesh);
-        const index = this.objects.indexOf(object.mesh);
-        if (index > -1) {
-          this.object.splice(index, 1);
-        }
+        Utils.removeElementFromArray(object, this.objects);
+        this.player.removeBall(object);
       } else {
         object.update();
       }
@@ -41,6 +46,8 @@ class Game {
   }
 
   loadLevel(level) {
+    this.level = level;
+
     for (const object of level.objects) {
       this.addObject(object);
     }
@@ -50,10 +57,6 @@ class Game {
     for (const ball of this.player.balls) {
       level.addFinishableObject(ball, (object) => {
         object.markToBeRemoved();
-        const index = this.player.balls.indexOf(object);
-        if (index > -1) {
-          this.player.balls.splice(index, 1);
-        }
         this.player.addPoints(1);
         console.log(`Points: ${this.player.points}`);
       });
