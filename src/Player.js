@@ -10,6 +10,7 @@ class Player {
     this.balls = [];
     this.position = new CANNON.Vec3();
     this.points = 0;
+    this.scatter = 0;
 
     const d = 2*r;
     for (let i = 0; i < n; i++) {
@@ -29,13 +30,18 @@ class Player {
     center = center.scale(1/this.balls.length);
     this.position = center;
 
-    // Remove balls too far from center
+    // Remove balls too far from center, calculate max scatter
+    let scatter = 0;
     for (const ball of this.balls) {
       const distance = this.position.distanceTo(ball.position);
       if (distance > DEADZONE_DISTANCE) {
         ball.markToBeRemoved();
       }
+      if (distance > scatter) {
+        scatter = distance;
+      }
     }
+    this.scatter = scatter;
   }
 
   addPoints(points) {

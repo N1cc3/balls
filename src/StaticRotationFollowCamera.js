@@ -5,7 +5,8 @@ class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
 
   constructor(fov = 75, aspect = window.innerWidth / window.innerHeight, near = 0.001, far = 100) {
     super(fov, aspect, near, far);
-    this.offset = new THREE.Vector3(0, 1, 1);
+    this.baseOffset = new THREE.Vector3(0, 1, 1);
+    this.offset = this.baseOffset;
   }
 
   /**
@@ -19,6 +20,13 @@ class StaticRotationFollowCamera extends THREE.PerspectiveCamera {
     this.position.copy(targetCameraPosition);
 
     this.lookAt(targetPosition);
+  }
+
+  /**
+   * @param {THREE.Vector3} offset
+   */
+  setOffset(offset) {
+    this.offset = offset;
   }
 
 }
