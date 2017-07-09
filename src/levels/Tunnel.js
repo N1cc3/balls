@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import CANNON from 'cannon';
 import Level from '../Level';
 import Pipe from '../objects/Pipe';
+import Box from '../objects/Box';
 import {MATERIALS,} from '../Physics';
 
 class Tunnel extends Level {
@@ -17,6 +18,19 @@ class Tunnel extends Level {
     );
     background.scale.x = -1; // Invert the sphere
     this.setBackground(background);
+
+    const finish = new Box(1, 0.5, 0.5, '#0000ff');
+    finish.mass = 0;
+    finish.updateMassProperties();
+    finish.material = MATERIALS.static;
+    finish.mesh.material.transparent = true;
+    finish.mesh.material.opacity = 0.5;
+    finish.mesh.castShadow = false;
+    finish.mesh.receiveShadow = false;
+
+    finish.position.set(0, -0.2, -3);
+
+    this.setFinish(finish);
 
     const pipe1 = new Pipe(0.5, 6, 0.05, 8, 0.5, -Math.PI / 2);
     pipe1.mass = 0;

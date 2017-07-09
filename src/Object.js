@@ -5,6 +5,7 @@ class Object extends CANNON.Body {
   constructor(options) {
     super(options);
     this.mesh = null;
+    this.isToBeRemoved = false;
   }
 
   setVisual(scene, mesh) {
@@ -24,6 +25,10 @@ class Object extends CANNON.Body {
     this.addEventListener('collide', (e) => {
       callback(e);
     });
+  }
+
+  markToBeRemoved() {
+    this.isToBeRemoved = true;
   }
 
 }

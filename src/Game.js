@@ -15,7 +15,16 @@ class Game {
     PHYSICS.update(delta);
     this.player.update();
     for (const object of this.objects) {
-      object.update();
+      if (object.isToBeRemoved) {
+        PHYSICS.removeBody(object);
+        SCENE.remove(object.mesh);
+        const index = this.objects.indexOf(object.mesh);
+        if (index > -1) {
+          this.object.splice(index, 1);
+        }
+      } else {
+        object.update();
+      }
     }
   }
 
@@ -34,6 +43,20 @@ class Game {
   loadLevel(level) {
     for (const object of level.objects) {
       this.addObject(object);
+    }
+
+    this.addObject(level.finish);
+
+    for (const ball of this.player.balls) {
+      level.addFinishableObject(ball, (object) => {
+        object.markToBeRemoved();
+        const index = this.player.balls.indexOf(object);
+        if (index > -1) {
+          this.player.balls.splice(index, 1);
+        }
+        this.player.addPoints(1);
+        console.log(`Points: ${this.player.points}`);
+      });
     }
 
     SCENE.add(level.background);
